@@ -1,0 +1,154 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>虚拟IP</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="city.js"></script>
+</head>
+
+<body>
+
+<form id="frm1" onsubmit="set_my_city();return false;">
+想要虚拟的城市：
+<select id="prov" name="prov"></select>
+<select id="city" name="city"></select>
+<br>
+<br>
+
+虚拟IP的生效时间周期：
+<select name="time">
+	<option value="30" selected>半小时
+	<option value="60">1小时
+	<option value="120">2小时
+	<option value="180">3小时
+	<option value="240">4小时
+	<option value="300">5小时
+</select>
+
+<br>
+<br>
+验证码：
+<input type="text" name="sign">
+
+<img id="sign_img">
+
+<a href="javascript:void(0)" onclick="reload_sign_img();blur();">看不清，换一个</a>
+
+<br>
+
+
+<input type="button" value="提交" onclick="set_my_city()">
+</form>
+<br><br><br><br><br><br><br><br><br><br><br>
+<div id="cur_city"></div>
+<div style="color:red;">
+注：仅限在当前浏览器有效；<br>
+使用虚拟IP后，此台电脑所看到的广告均为虚拟城市环境所后的广告投放情况；
+</div>
+<script>
+
+$(function(){
+	init_prov();
+	reload_sign_img();
+	get_current_vcity();
+});
+
+function init_prov()
+{
+	var sel_prov = $("#prov");
+	var sel_city = $("#city");
+
+	for(var id in province_name) {
+		var opt = document.createElement("option");
+		opt.value = id;
+		opt.innerHTML = province_name[id]["name"];
+		sel_prov.append(opt);
+	}
+	sel_prov.change(prov_onchange);
+	prov_onchange();
+
+	function prov_onchange(){
+		sel_city.empty();
+		pid = sel_prov.val();
+		for(var id in city_name) {
+			if(pid != city_name[id]["province_id"])
+				continue;
+			var opt = document.createElement("option");
+			opt.value = id;
+			opt.innerHTML = city_name[id]["name"];
+			sel_city.append(opt);
+		}
+	}
+
+	;
+}
+
+function get_current_vcity()
+{
+	var vck = GetCookie("vcity");
+	if(vck) {
+		vck = vck.split("_");
+		var now = new Date().getTime();
+		var t = parseFloat(vck[2]);
+		var str = "";
+		if(t > now) {
+			str += "当前的虚拟城市："+ province_name[vck[0]]["name"]+" "+city_name[vck[1]]["name"];
+			str += " 剩余可用时间：" + fmt_time(t-now);
+		}
+		$("#cur_city").html(str);
+	}
+	setTimeout(get_current_vcity, 1000);
+}
+
+function fmt_time(t) {
+	t = Math.floor(t/1000);
+	var s = "";
+	if( t > 3600) {
+		var h = Math.floor(t/3600);
+		s += h + "小时";
+		t -= h * 3600;
+	}
+	if( t > 60) {
+		var m = Math.floor(t/60);
+		s += m + "分";
+		t -= m * 60;
+	}
+	s += t + "秒";
+	return s;
+}
+
+function GetCookie(sName)
+{
+	// cookies are separated by semicolons
+	var aCookie = document.cookie.split("; ");
+	for (var i=0; i < aCookie.length; i++)
+	{
+		// a name/value pair (a crumb) is separated by an equal sign
+		var aCrumb = aCookie[i].split("=");
+		if (sName == aCrumb[0])
+			return unescape(aCrumb[1]);
+	}
+	// a cookie with the requested name does not exist
+	return null;
+}
+
+function reload_sign_img()
+{
+	setTimeout(function(){
+		$("#sign_img")[0].src = "v.jsp?"+Math.random();
+	}, 100);
+}
+
+function set_my_city()
+{
+	$.get("action.jsp", $("#frm1").serialize(), function(r) {
+		r = r.split(",");
+		alert(r[1]);
+		reload_sign_img();
+	});
+}
+
+</script>
+
+</body>
+</html>

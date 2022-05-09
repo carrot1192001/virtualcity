@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- 编辑使用 XMLSpy v2006 U (http://www.altova.com) 由 any (any) -->
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_3.dtd">
+<database name="atm" package="com.youku.atm.om">
+	<table name="ad_type" idMethod="none" description="广告类型，如疯狂，弹出，图片，前后贴，暂停，开机广告，关机广告，屏保广告、overlay等">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0无效    "/>
+		<column name="show_type" required="true" default="-1" type="INTEGER" description="视频:1，页面:2，banner：3"/>
+	</table>
+	<table name="ad_order" idMethod="none" description="广告">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="custom_id" required="true"  type="INTEGER"/>
+		<column name="custom_name" required="true" type="VARCHAR" size="255" description="客户名称"/>
+		<column name="type" required="true" type="INTEGER" description="合同类别	SALE = 0;MARKET = 1，TEST = 2 迁移合同 = 3;"/>
+		<column name="update_time" required="true" type="TIMESTAMP" description="修改时间"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态:状态，1草稿，-1删除，2锁定，3正式，4解锁，5申请结案，6结案，7撤销    "/>
+		<column name="industry_id" required="false"  type="INTEGER" description="行业ID"/>
+		<column name="sub_industry_id" required="false"  type="INTEGER" description="子行业ID"/>
+		<column name="category_id" required="false"  type="INTEGER" description="品类ID"/>
+		<column name="marketing_type" required="false"  type="INTEGER" default="0" description="营销类型；0:不显示；1:全域营销;2:内容营销;3:资源置换;4:内部推广；销售订单必选1,2;市场订单必选:3,4;"/>
+	</table>
+	<table name="region" idMethod="native" description="ip地址表-新版2012洗刷后">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="city_id" required="true" type="VARCHAR" size="100" description="城市代码"/>
+		<column name="province_id" required="true" type="VARCHAR" size="100" description="省级代码"/>
+		<column name="start_ip" required="true" type="VARCHAR" size="100" description="起始ip"/>
+		<column name="end_ip" required="true" type="VARCHAR" size="100" description="结束ip"/>
+		<column name="geoid" required="true" type="VARCHAR" size="100" description="行政区域编码"/>
+	</table>
+
+	<!--级别包括大洲、国家、省份、城市4个级别，需要与CPM团队确定level取值,int型？-->
+	<table name="area" idMethod="none" description="地区表">
+		<!-- id取值:北美洲na,南美:sa,亚洲as,非洲af，大洋洲:oa,欧洲:eu,南极洲:an, 国家使用国际通用id-->
+		<column name="id" required="true" primaryKey="true" type="VARCHAR" size="200" autoIncrement="false" description="id"/>
+		<column name="parent_id" required="true" type="VARCHAR" size="200" description="父节点ID"/>
+		<column name="level" required="true" type="VARCHAR" size="50" description="地区级别,state 大洲、country 国家、province 省份、city 城市4个级别"/>
+		<column name="name" required="true" type="VARCHAR" size="200" description="地区名称"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0无效    "/>
+		<column name="description" required="false" type="VARCHAR" size="500" description="备注"/>
+	</table>
+	
+	<!--地区温度城市名字对应表-->
+    <table name="temp_area" idMethod="none" description="温度地区表">
+        <!-- id取值:北美洲na,南美:sa,亚洲as,非洲af，大洋洲:oa,欧洲:eu,南极洲:an, 国家使用国际通用id-->
+        <column name="id" required="true" primaryKey="true" type="VARCHAR" size="200" autoIncrement="false" description="id"/>
+        <column name="name" required="true" type="VARCHAR" size="200" description="地区名称"/>
+    </table>
+    
+	<!--相比CPM，去掉了site字段，将site和znw都放到分类的维度上-->
+	<table name="channel" idMethod="none" description="分类表">
+		<!--id取值：优酷全站:yk,土豆全站:td,优酷站内:ykn,优酷站外ykw,土豆站内:tdn,土豆站外:tdw-->
+		<column name="id" required="true" primaryKey="true" type="VARCHAR" size="50" description="id"/>
+		<column name="parent_id" required="true" type="VARCHAR" size="100" description="父节点ID"/>
+		<column name="type" required="true" type="VARCHAR" size="50" description="节点类型：site，nw，ct，cs"/>
+		<column name="name" required="true" type="VARCHAR" size="100" description="分类名称"/>
+		<column name="is_hot" required="true" type="INTEGER" default="0" description="是否热门二级分类,1是,0否"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0无效    "/>
+		<column name="refvalue" required="false" type="VARCHAR" size="500" description="标识站外频道对应的站内频道"/>
+		<column name="description" required="false" type="VARCHAR" size="500" description="备注"/>
+	</table>
+	<table name="crontab_info" idMethod="native" description="定时任务表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="period" required="true" type="VARCHAR" size="100" description="执行的时间点或周期"/>
+		<column name="task_url" required="true" type="VARCHAR" size="400" description="执行任务的url或路径"/>
+		<column name="ip" required="true" type="VARCHAR" size="40" description="执行的服务器IP"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态,1开启,0关闭"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="任务描述"/>
+	</table>
+	
+	<table name="time_task" idMethod="native" description="新定时任务表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="name" required="true" type="VARCHAR" size="100" description="任务名称"/>
+		<column name="period" required="true" type="VARCHAR" size="100" description="表达式"/>
+		<column name="ip" required="true" type="VARCHAR" size="40" description="执行的服务器IP"/>
+		<column name="interface_name" required="true" type="VARCHAR" size="100" description="接口"/>
+		<column name="params" required="true" type="VARCHAR" size="100" description="参数"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态,1开启,0关闭"/>
+	</table>
+	
+	<table name="platform" idMethod="none" description="设备平台表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="brand" required="true" type="VARCHAR" size="10" description="品牌"/>
+		<column name="site" required="true" default="1" type="INTEGER" description="站点：1优酷，2土豆,3数娱，0全站"/>
+		<column name="dt" required="true" type="VARCHAR" size="50" description="设备  0:pad, 1:phone, 2:TV, 3:PC"/>
+		<column name="device_model" required="true" type="VARCHAR" size="50" description="设备型号"/>
+		<column name="os" required="true" type="VARCHAR" size="50" description="操作系统 0:ios, 1:Android, 2:Windows, 3:Mac"/>
+		<column name="os_version" required="true" type="VARCHAR" size="50" description="操作系统版本号"/>
+		<column name="aw" required="true" type="VARCHAR" size="20" description="访问方式app:a,web:w"/>
+		<column name="client_version" required="true" type="VARCHAR" size="20" description="客户端版本号"/>
+		<column name="sort_code" required="true" default="1" type="INTEGER" description="排序"/>
+		<column name="net" required="true" type="VARCHAR" size="50" description="test"/>
+		<column name="value" required="true" type="VARCHAR"  size="50" description="拼接出来的值,site_os_dt_aw"/>
+		<column name="status" required="true" type="INTEGER" description="状态: 1有效 0无效    "/>
+	<unique>
+				<unique-column name="value"/>
+	</unique>
+	</table>
+	<table name="log_config" idMethod="native" description="日志配置表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="name" required="true" type="VARCHAR" size="256" description="日志名称"/>
+		<column name="code" required="true" type="VARCHAR" size="256" description="日志代码，英文标识"/>
+		<column name="ip" required="true"  type="VARCHAR" size="256"  description="日志记录ip"/>
+		<column name="remoteport" required="true" type="VARCHAR" size="256" description="远程ip端口"/>
+		<column name="localport" required="true" type="VARCHAR" size="256" description="本地ip端口"/>
+		<column name="path" required="true" type="VARCHAR" size="256" description="日志存放路径"/>
+		<column name="site" required="true" type="INTEGER" default="0" description="站点：1优酷，2土豆, 3数娱， 0优酷土豆"/>
+		<column name="log_type" required="true" type="VARCHAR" size="20" default="a" description="a为access,s为show,c为click,o为over,f为fee"/>				
+		<column name="p_type" required="true" type="INTEGER" default="0" description="客户端请求时传来的p参数:0不需要,1前贴,2后贴,3中插,4暂停,5角标,6播放页banner,7移动前贴,8移动中插,9移动后贴,10=移动暂停,11移动角标，12移动开机图"/>
+	</table>
+	<table name="server_config" idMethod="native" description="服务器配置表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="ip" required="true" type="VARCHAR" size="40" description="服务器IP"/>
+		<column name="role" required="true" type="INTEGER" description="角色,1视频前端,2页面前端,3日志,4后端缓存,5调度中心,6CookieServer,7监控中心"/>
+		<column name="status" required="true" type="INTEGER" description="状态: 1有效 -1无效    "/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="备注"/>
+	</table>
+	<table name="seed" idMethod="none" description="种子广告">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,自增"/>
+		<column name="vid" required="true" type="VARCHAR" size="100" description="种子视频的id"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="种子视频名称"/>
+		<column name="url" required="false" type="VARCHAR" size="255" description="种子视频访问地址"/>
+		<column name="description" required="false" type="LONGVARCHAR" size="2000" description="种子视频描述"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态,1为活跃，0为停止"/>
+		<column name="site" required="true" default="1" type="INTEGER" description="站点：1优酷，2土豆,3数娱，0全站"/>
+		<column name="survey_url" required="false" type="VARCHAR" size="255" description="调研问卷地址"/>
+	</table>
+	<table name="copyright_user" idMethod="native" description="版权用户表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="uid" required="true" type="BIGINT" description="上传用户id，后缀追加9999，用以区分vid"/>
+		<column name="uname" required="true" type="VARCHAR" size="250" description="上传用户名称"/>
+		<column name="status" required="true" type="INTEGER" default="0" description="状态: 1有效 0无效    "/>
+		<index name="copyright_uid">
+			<index-column name="uid"/>
+		</index>
+	</table>
+	<table name="video_group_list" idMethod="none" description="视频组对应的视频id列表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="type" required="true" type="INTEGER" description="id的类型：1优酷视频id 2优酷播单id 3优酷节目id 4土豆视频id 5土豆豆单id 6土豆节目id,7入口营销，8数娱视频id，9数娱专辑id，10节目id"/>
+		<column name="value" required="true" type="LONGVARCHAR" size="20000" description="视频id或节目id或专辑id列表，以英文逗号分隔"/>
+		<column name="update_time" required="true" type="TIMESTAMP" description="修改时间"/>
+		<column name="start_time"  type="DATE" description="开始时间，非空按值计算开始时间，空则按生效计算，必须大于结束时间"/>
+		<column name="end_time"  type="DATE" description="结束时间，非空按值计算结束时间，空则按无过期计算，必须大于开始时间"/>
+		<column name="video_group_id" required="true" type="INTEGER" description="对应的视频组id"/>
+		<column name="status" required="true" type="INTEGER" description="状态: 1有效 0无效    "/>
+	</table>
+	<table name="adlen_range" idMethod="none" description="广告投放时长区间表 ">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="v_point_id" required="true" type="VARCHAR" size="100" description="广告点位"/>
+		<column name="vlen_low" required="true" type="INTEGER" description="视频时长下限(分钟)"/>
+		<column name="vlen_high" required="true" type="INTEGER" description="视频时长上限(分钟)"/>
+		<column name="adlen_max" required="true" type="INTEGER" description="广告时长的最大值(秒)"/>
+		<column name="adcount_max" required="true" type="INTEGER" description="广告个数"/>
+		<column name="resource_id" required="true" type="INTEGER" description="资源包ID"/>
+		<column name="status" required="true" type="INTEGER" description="状态: 1有效 0无效    "/>
+		<column name="isUseRange" required="true" type="INTEGER" default="1" description="是否启用溢出机制,1为启用，0为不启用"/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_adlen">
+			<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="v_position" idMethod="none" description="广告点位,对应于数据团队的adposition字段">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="parent_id" required="true" type="INTEGER" description="父节点id"/>
+		<column name="name" required="true" type="VARCHAR" size="50" description="广告位名称"/>
+		<column name="manage_type" required="false" type="VARCHAR" size="10" description="manage类型，f:前贴,o:中插,b:后贴,p暂停,c角标,i开机图,贴片为null，on开机广告，off关机广告，sg屏保广告"/>
+		<column name="ps" required="true" type="INTEGER" description="广告点的序号，从0开始计数,除了中插，其它都只取值0"/>
+		<column name="ad_seq" required="true" type="INTEGER" description="一个广告点上的广告序号,从1开始计数,如果是广告点的记录，则取值为0"/>
+		<column name="type" required="true" type="INTEGER" description="0：非位置序号1位置序号"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0无效    "/>
+	</table>
+	<table name="h_position" idMethod="none" description="广告点位,对应于数据团队的adposition字段">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="parent_id" required="true" type="INTEGER" description="父节点id"/>
+		<column name="name" required="true" type="VARCHAR" size="50" description="广告位名称"/>
+		<column name="type" required="true" type="INTEGER" description="2广告页3广告块4广告位"/>
+		<column name="value" required="true" type="INTEGER"  description="广告位ID"/>
+		<column name="templet" required="true" type="LONGVARCHAR" size="2000" description="广告模板"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0无效    "/>
+	</table>
+	<table name="h_count" idMethod="none" description="广告位最大预定量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="value" required="true" type="INTEGER"  description="最大预定量"/>
+	</table>
+
+	
+	<table name="resource" idMethod="none" description="资源定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="描述"/>
+		<column name="type" required="true" type="INTEGER" description="类型，1保护资源,2时长资源,3溢出资源"/>
+		<column name="level" required="true" type="INTEGER" description="优先级"/>
+	</table>
+	<!-- TODO SUNXIN add position表 -->
+	<table name="overflow_range" idMethod="none" description="广告溢出区间配置表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="resource_id" required="true" type="INTEGER" description="资源id"/>
+		<column name="contents" required="true" type="LONGVARCHAR" size="8000" description="溢出配置信息"/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_overflow">
+			<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="protect" idMethod="none" description="保护服务表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="标题"/>
+		<column name="manage_type" required="true" type="VARCHAR" size="255" description="广告类型 前f中o后b暂停p角标c开机图i,bannerv,页面h"/>
+        <column name="positions" required="true" type="VARCHAR" size="255" description="广告位id(只存放manageType=‘v’和‘h’时对应的具体广告位id，且用逗号分隔。其他情况，默认为空串。)"/>
+		<column name="parent" required="true" type="INTEGER" description="上一级 protect ID 用于继承白名单"/>
+		<column name="priority" required="true" type="INTEGER" description="优先级 从小到大 取第一个符合资源描述的"/>
+		<column name="resource_id" required="true" type="INTEGER" description="资源ID"/>
+		<column name="color" required="true" type="INTEGER" description="0黑/1白"/>
+		<column name="starttime" required="true" type="DATE" description="开始时间"/>
+		<column name="endtime" required="true" type="DATE" description="结束时间"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0草稿 -1删除    "/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_protect">
+			<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="protect_ad" idMethod="native" description="保护广告表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="protect_id" required="true" type="INTEGER" description="id,自增"/>
+		<column name="type" required="true" type="INTEGER" description="类型1合作方 2产品 3合同 4广告主 5投放 6素材 7定向方式 8创意效果"/>
+		<column name="value" required="true" type="VARCHAR" size="255" description="产品ID,合同ID ,广告主ID,投放ID,素材ID"/>
+		<foreign-key foreignTable="protect" name="fk_protect_id">
+			<reference local="protect_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="resource_direction" idMethod="native" description="资源定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="resource_id" required="true" type="INTEGER" description="资源id"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="定向类型 area，channel，subos，videogroup，prd，partnerid，pid，user，domain，vl 格式 [0,60]，paid，vip"/>
+		<column name="value" required="true" type="VARCHAR" size="255" description="定向值 11 31 a d android ios等"/>
+		<column name="is_positive" required="true" type="INTEGER" description="1正定向,0反定向"/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_resourcedirec">
+		<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<!--TODO ZYF cp_material_standard素材规格,interact_effect创意扩展 的含义，packageid产品包id-->
+	<table name="ad_cast" idMethod="none" description="投放表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="order_id" required="true" type="INTEGER" description="订单id"/>
+		<column name="customer_id" required="true" type="INTEGER" description="客户id"/>
+		<column name="product_id" required="true" type="INTEGER" description="产品id"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="投放名称"/>
+		<column name="ad_type_id" required="true" type="INTEGER" description="广告类型"/>
+		<!-- TODO ZYF 取值范围整理-->
+		<column name="direct_way" required="true" type="VARCHAR" size="100" description="定向方式,如:地区a，分类c，平台p，关键字k，用户u，视频组g，清晰度dq，合作方par，付费paid，TVB定向prd，人群定向tag，用*分隔"/>
+		<column name="cast_way" required="true" type="VARCHAR" size="100" description="投放方式：CPM:cpm、CPC:cpc、Campaign:camp、轮播:lun、百分比:percent、时间段:time、定量优化:pior、缺省：default，全流量:fuflow,轮刷:shua, CPV:cpv, CPP:cpp,用*和+表示关系，例如：cpm+cpc，cpm*time,RTB:rtb"/>
+		<column name="interact_effect" required="true" type="INTEGER" description="交互效果：1.常规,2.全屏,3.互动,4.crazy,5.adselector, 6:TrueView,7:移动sdk, 23:互动广告v2, 25:全景，26:全景TrueView"/>
+		<column name="is_copyright" required="true" type="INTEGER" description="版权要求：0无版权要求,1有版权要求" default="0"/>
+		<column name="price" required="true" type="DOUBLE" description="单价" default="0"/>
+		<column name="speed_type" required="true" type="INTEGER" description="投放速度：0平均投放1尽快投放" default="0"/>
+		<!--TODO 产品待定,是否需要另外一个产品优先级，或直接使用vip的优先级-->
+		<column name="type_priority" required="true" type="INTEGER" description="保量方式优先级: 1非保量，2保量"/>
+		<column name="product_priority" required="true" type="INTEGER" description="产品优先级"/>
+		<column name="vip_priority" required="true" type="INTEGER" description="VIP优先级"/>
+		<column name="order_priority" required="true" type="INTEGER" description="订单优先级"/>
+		<column name="custom_priority" required="true" type="INTEGER" description="客户优先级"/>
+		<column name="custom_num_priority" required="true" type="INTEGER" description="微调优先级"/>
+		<column name="camp_priority" required="true" type="INTEGER" description="频次的优先级"/>
+		<column name="area_priority" required="true" type="INTEGER" description="地区优先级"/>
+		<column name="channel_priority" required="true" type="INTEGER" description="分类优先级"/>
+		<column name="platform_priority" required="true" type="INTEGER" description="平台优先级"/>
+		<column name="user_priority" required="true" type="INTEGER" description="用户优先级"/>
+		<column name="keyword_priority" required="true" type="INTEGER" description="关键字优先级"/>
+		<column name="videogroup_priority" required="true" type="INTEGER" description="视频组优先级"/>
+		<column name="ro_priority" required="true" type="INTEGER" description="定量优化的优先级，与打分无关"/>
+		<column name="sow_type" required="false" default="0" type="INTEGER" description="播种方式，0为随机播种，1为优化播种"/>
+		<column name="rate_m" required="false" default="0" type="INTEGER" description="随机播种时标识新用户播种时长，n分钟之内对新用户不进行播种，0表示不做限制"/>
+		<column name="rates" required="false" default="100" type="INTEGER" description="播种比例,0-100" />
+		<column name="threshold" required="false" default="0" type="DOUBLE"  description="优化播种时，预估优化模型的阈值"/>
+		<column name="rtb_type" required="false" default="0" type="INTEGER"  description="RTB类型，0无，1优选"/>
+		<column name="update_time" required="true" type="TIMESTAMP" description="修改时间"/>
+		<column name="start_date" required="true" type="DATE" description="投放开始日期"/>
+		<column name="end_date" required="true" type="DATE" description="投放结束日期"/>
+		<!--caolei-->
+		<column name="rtbid" required="false" type="INTEGER" default="0" description="第三方rtb的广告位id，0表示非rtb投放"/>
+		<column name="idea_show_type" required="true" type="INTEGER" description="素材分配方式,0:cpm,1:百分比,2创意轮播"/>
+		<column name="main_cast_id" required="true" type="INTEGER" default="0" description="子投放所关联的主投放ID,当前记录为主投放时,本字段取值为0"/>
+		<column name="is_bak" required="false" default="0" type="INTEGER"  description="是否可以作为智能预留广告的备选广告，0非，1是"/>
+		<column name="dsp_id" required="true" type="VARCHAR" size="100" default="0" description="dsp id"/>
+		<column name="deal_id" required="true" type="VARCHAR" size="100" default="0" description="deal id"/>
+		<column name="skip_time" required="true" type="INTEGER" default="0" description="skip_time"/>
+		<column name="direct_type" required="true" type="INTEGER" default="0" description="直投或散投类型：0直投，1散投"/>
+		<column name="pdb_type" required="true" type="INTEGER" default="0" description="0:普通  1:s2s  2:c2s "/>
+		<column name="danger_ip_weight" required="true" type="INTEGER" default="0" description="IP漂移_安全IP库_安全投放标识，取值范围：0-100，值越大，ATM不投放的概率越高，即越安全。"/>
+        <column name="charge_type" required="true" type="INTEGER" default="0" description="0:常规收费,1信息流视频收费"/>
+		<column name="is_aiid_ta" required="true" type="INTEGER" default="0" description="is_aiid_ta"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态,1为活跃,-1为删除,0为不活跃"/>
+		<column name="mutex" required="true" type="INTEGER" default="0" description="是否互斥，1-是，0-否"/>
+		<column name="charge_time" required="true" type="INTEGER" default="0" description="charge_time"/>
+		<column name="resource_type" required="true" type="VARCHAR" size="1000" default="" description="资源类型,多个逗号分隔"/>
+		<column name="outside" required="true" type="INTEGER" default="0" description="0-通投 1-站内 2-站外"/>	
+		<column name="pbak" required="true" type="INTEGER" default="0" description="pdb打底"/>
+		<column name="is_area" required="true" type="INTEGER" default="0" description="0-非地域 1-地域"/>
+		<foreign-key foreignTable="ad_type" name="fk_ad_type_id_adcast">
+			<reference local="ad_type_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="ad_order" name="fk_ad_order_id_adcast">
+			<reference local="order_id" foreign="id"/>
+		</foreign-key>
+
+	</table>
+
+	
+	<table name="cast_channel" idMethod="native" description="投放分类定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称channel"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 a d 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_channel">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="channel" name="fk_channel_id_cast">
+			<reference local="direct_value" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="cast_area" idMethod="native" description="投放地区定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<!-- TODO ZDW direct_name取值范围-->
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称area 等"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 11 31等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_area">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="area" name="fk_area_id_cast">
+			<reference local="direct_value" foreign="id"/>
+		</foreign-key>
+	</table>
+	<!--需新增平台相关表-->
+	<table name="cast_platform" idMethod="native" description="投放平台定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 subos "/>
+		<column name="direct_value" required="true" type="VARCHAR" size="50" description="site_os_dt_aw"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_platform">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="platform" name="fk_platform_value_cast">
+			<reference local="direct_value" foreign="value"/>
+		</foreign-key>
+	</table>
+	<table name="cast_position" idMethod="native" description="投放贴片位置定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 adposition "/>
+		<column name="direct_value" required="true" type="VARCHAR" size="1000" description="定向值 60010,60034,60058等"/>
+		<column name="mutex" required="true" type="INTEGER" description="是否独占第一前贴，1是,0否" default="0"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_position">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_hposition" idMethod="native" description="投放贴片位置定向表(页面)">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 hposition "/>
+		<column name="direct_value" required="true" type="INTEGER" description="定向值 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_position_h">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="h_position" name="fk_h_position_id_cast">
+			<reference local="direct_value" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="cast_videogroup" idMethod="native" description="投放视频定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 videogroup "/>
+		<column name="direct_value" required="true" type="INTEGER" description="定向值 1131 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_videogrouplist">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_key" idMethod="native" description="投放关键字定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 key"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 k1 k2 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_key">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_user" idMethod="native" description="投放用户定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 user "/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="取值格式 site_uid"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_user">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_partnerid" idMethod="native" description="投放合作伙伴定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 partnerid 等"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 AXOXKD 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_partnerid">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_pid" idMethod="native" description="移动app分发渠道定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 pid 等"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 9ce2c5a5d3218488 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_pid">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_dq" idMethod="native" description="投放清晰度定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 dq "/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 1,1,1 数组，分别表示超高标"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_dq">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_campaign" idMethod="native" description="投放频控表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="campaign_id" required="true" type="INTEGER" description="素材频次id"/>
+		<column name="campaign_num" required="true" type="VARCHAR" size="200" default="0" description="频次序号,格式:1-3表示定向第1到3次,为0表示全程定向,4表示定向第4次"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_campaign">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="campaign" name="fk_campaign_id_cast">
+			<reference local="campaign_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_paid" idMethod="native" description="付费定向">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称，取值 paid "/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 paid =cannot”, “time”, “episode”	可选	表示付费视频的类型：”cannot”表示不投广告的付费视频,”time”按分钟试看的付费视频,”episode”按剧集试看的付费视频"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_paid">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_prd" idMethod="native" description="TVB定向">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称，取值 prd "/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 tvb"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_prd">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_tag" idMethod="native" description="人群标签定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 tag"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 tagid"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_tag">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_embed" idMethod="native" description="移花接木定向">
+        <column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+        <column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+        <column name="video_id_yk" required="false" type="VARCHAR" size="255" description="优酷视频id"/>
+        <column name="video_id_td" required="false" type="VARCHAR" size="255" description="土豆视频id"/>
+        <column name="break_id" required="true" type="VARCHAR" size="255" description="场景id"/>
+        <column name="start_time" required="true" type="INTEGER" description="开始时间"/>
+        <column name="show_time" required="true" type="INTEGER" description="广告时长"/>
+        <foreign-key foreignTable="ad_cast" name="fk_cast_id_tag">
+            <reference local="cast_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+	<table name="cast_direction" idMethod="native" description="投放定向配置表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 key"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 k1 k2 等"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<column name="type" required="true" type="INTEGER" default="0" description="type"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_key">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_vip" idMethod="native" description="vip定向">
+        <column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+        <column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+        <column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 vip"/>
+        <column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 0和1"/>
+        <column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+        <foreign-key foreignTable="ad_cast" name="fk_cast_id_vip">
+            <reference local="cast_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    
+	<table name="campaign" idMethod="none" description="一次投放活动，允许跟任意素材关联，用于统计n+">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="250" description="campaign名称"/>
+		<column name="type" required="true" type="INTEGER" default="1" description="类型，1曝光，2点击，3完成, 4跳过，5预装载"/>
+		<column name="start_date" required="true" type="DATE" description="campaign开始时间"/>
+		<column name="end_date" required="true" type="DATE" description="campaign结束时间"/>
+		<column name="update_time" required="true" type="TIMESTAMP" description="记录修改时间"/>
+		<column name="numlimit" required="true" type="INTEGER" default="0" description="总次数限制，大于0的整数表示单用户观看广告次数上限"/>
+		<column name="daylimit" required="true" type="VARCHAR" size="255" default="0" description="以天为周期的频次控制,(1;3@2;5):代表1天3次;2天5次"/>
+        <column name="unite" required="true" type="INTEGER" default="0" description="是否启用跨屏联合频次控制，1：是， 0：否  "/>
+        <column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 -1无效    "/>
+	</table>
+
+	
+	<table name="idea" idMethod="none" description="素材表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id,默认为0"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="素材名称"/>
+		<column name="showtime" required="true" type="INTEGER" description="素材时长"/>
+		<column name="i_priority" required="true" type="INTEGER" description="同一个投放下多个素材之间的优先级,0为非创意轮播"/>
+		<column name="count" required="true" type="INTEGER" description="当天需要投放的次数,与i_priority配合形成创意轮播,0为非创意轮播"/>
+		<column name="numlimit" required="false" type="INTEGER" description="老调度中心计算得到的每分钟投放量,备注，接口中不存在该字段，同步到atm数据库的时候为0" default="0"/>
+		<column name="dq" required="false" type="VARCHAR" size="255" description="可以提供的素材清晰度,逗号分隔的字符串，从左至右分别为超高标" />
+		<column name="iesorg" required="true" type="VARCHAR" size="255" description="ies监测机构,没有时为空字符串"/>
+		<column name="cuf" required="true" type="INTEGER" description="0=browser，1=webview；增加参数值：2=app内播放页，3=app内节目页，4=app内专题页" />
+		<column name="controlType" required="true" type="INTEGER" description="控制策略,0=无控制策略,1=播放器控制显示位置和跳转；2=播放器控制显示位置，素材控制跳转；3=素材控制显示位置和跳转"/>
+		<column name="issdk" required="true" type="INTEGER" description="是否采用SDK监测,仅移动APP此字段有含义, 0 API监控方式 1 SDK监控方式 默认0"/>
+		<column name="sdkid" required="false" type="INTEGER" default="0" description="sdkid"/>
+		<column name="mst" required="false" type="INTEGER" default="0" description="监测发送方式"/>
+		<column name="location_type" required="false" type="VARCHAR" size="50" description="角标的位置类型,取值为:BOTTOM_CENTER,BOTTOM_LEFT,BOTTOM_RIGHT,TOP_LEFT，TOP_RIGHT，TOP_CENTER"/>
+		<column name="close_method" required="true" type="INTEGER" description="控制角标展示showtime秒之后直接关闭或收缩,0表示非角标无意义,1表示关闭，2表示缩进"/>
+		<column name="idea_show_location" required="false" type="INTEGER" default="0" description="移动素材展示位置，1: 不固定，0:固定 "/>
+		<column name="control_type_mobile" required="false" type="INTEGER" default="0" description="移动端控制策略，1:CF1,2:CF2;3:CF3,4:CF4 "/>
+		<column name="charge_time" required="false" type="INTEGER" description="计费时间点（秒）" />
+		<column name="update_time" required="true" type="TIMESTAMP" description="排期修改时间"/>		
+		<column name="play_type" required="true" type="INTEGER" default="0" description="test" />		
+		<column name="status" required="true" type="INTEGER" default="1" description="状态,1为活跃,-1为删除,0为不活跃"/>
+		<column name="loc_type" required="true" type="VARCHAR" size="50" description="角标、场景广告位置类型" />	
+		<column name="dp_cuf" required="false" type="INTEGER" default="0" description="deeplink" />
+		<column name="link_type" required="true" type="VARCHAR" size="255" description="link_type" />
+		<column name="link_id" required="true" type="VARCHAR" size="255" description="link_id" />
+		<column name="app_key" required="true" type="VARCHAR" size="255" description="app_key" />
+		<column name="ndisplay_type" required="false" type="INTEGER" default="0" description="ndisplay_type" />
+		<column name="begin_date" required="false" type="DATE" description="开始日期" />
+		<column name="end_date" required="false" type="DATE" description="结束日期" />
+	</table>
+	
+	<table name="ie" idMethod="none" description="新老对应表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="new_ie" required="true" type="INTEGER" description="新系统ID"/>
+		<column name="old_ie" required="true" type="INTEGER" description="老系统ID"/>
+		<column name="direction" required="true" type="INTEGER" description="0[新系统关联老系统],1[老系统关联新系统]"/>
+		<column name="type" required="true" type="INTEGER" description="类型：1、合同；2、投放；3、素材,4、campaign"/>
+	</table>
+	
+	
+	<!-- 单独分出表来存放调研信息的数据表-->
+	<table name="idea_survey" idMethod="native" description="素材调研信息表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="素材id"/>
+		<column name="stype" required="true" type="INTEGER" description="调研类型：1=曝光组，2=参照组"/>
+		<column name="site" required="true" type="INTEGER" default="1" description="站点：1优酷，2土豆,0优酷土豆"/>
+		<column name="aw" required="true" type="VARCHAR" size="10"  description="客户端类型:a为app,w为web"/>
+		<column name="survey_url" required="true" type="LONGVARCHAR" size="500" description="调研地址: 曝光地址或是参照地址"/>
+		<column name="click_url" required="false" type="LONGVARCHAR" size="500" description="点击地址，仅移动app平台时有数据"/>
+		<column name="survey_text" required="false" type="LONGVARCHAR" size="32" description="app调研入口文字，仅移动app平台有数据"/>
+		<column name="time_len" required="false" type="INTEGER" default="0"  description="app调研入口文字显示时长，仅移动app平台数据"/>
+		<foreign-key foreignTable="idea" name="fk_survey_idea_id">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="idea_url" idMethod="native" description="素材url表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="素材id"/>
+		<!-- 曹磊，需进一步确认type的取值含义-->
+		<column name="site" required="true" type="INTEGER" description="站点：1优酷，2土豆, 3数娱，0全站"/>
+		<column name="bt" required="true" type="INTEGER" description="平台：0通用，1PC，2移动，3TV"/>
+		<column name="type" required="true" type="INTEGER" description="1:贴片播放地址	2:PC端贴片的banner地址	3:JS广告地址  4:暂停全屏素材  5:暂停常规素材  6:暂停移动素材	7:角标	8:角标收起图	9:开机图	10:移动全屏	11:页面广告脚本内容	12:移动全屏ipad app	13:移动全屏iphone app	14:移动全屏Android pad app	15:移动全屏Android phone app 16：移动端互动贴片h5页面地址"/>
+		<column name="os" required="true" type="VARCHAR" size="2" description="系统：'0':IOS，'1':ADR，'2':WIN，默认:null"/>
+		<column name="content" required="true" type="LONGVARCHAR" size="2000" description="广告内容，如果是html类型，则广告内容为html代码，否则为url"/>
+		<column name="title" required="false" type="VARCHAR" size="512" description="标题"/>
+		<column name="text1" required="false" type="VARCHAR" size="512" description="描述1"/>
+		<column name="text2" required="false" type="VARCHAR" size="512" description="描述2"/>
+		<column name="idea_width" required="true" type="INTEGER" description="素材宽"/>
+		<column name="idea_height" required="true" type="INTEGER" description="素材高"/>
+        <column name="skip_tx" required="true" type="VARCHAR" description="移动开机图跳过按钮文字内容"/>
+		<column name="display_type" required="true" type="INTEGER" description="display_type"/>
+		<column name="iphonex" required="true" type="INTEGER" description="iphonex"/>
+		<column name="showtime" required="true" type="INTEGER" default="0" description="showtime"/>
+		<column name="seq" required="true" type="INTEGER" default="0" description="seq"/>
+		<column name="bit_rate" required="true" type="VARCHAR" description="bitrate"/>
+		<column name="volume" required="true" type="VARCHAR" description="volume"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_url">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="idea_monitor" idMethod="native" description="素材监测地址表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="关联idea表"/>
+		<!-- 曹磊 -->
+		<column name="type" required="true" type="INTEGER" description="1=点击地址，2=点击监测地址，3=曝光监测地址，4=完成监测地址，5=广告播放中达到MT时间点的时候请求此监测地址 6 标准第三方的曝光监测地址 7 标准第三方的点击监测地址 8=互动页面曝光监测地址  9跳过广告监测地址，10自定义点击跳转地址，11自定义点击监测地址，12cpp监测"/>
+		<column name="site" required="true" type="INTEGER" description="站点：1优酷，2土豆,0优酷土豆"/>
+		<column name="bt" required="true" type="INTEGER" description="平台：0通用，1PC，2移动"/>
+		<column name="url" required="true" type="LONGVARCHAR" size="1000" description="url地址"/>
+		<column name="mt" required="true" type="INTEGER" description="广告播放达到此时间点时（秒），播放器请求监测，-1表示此字段不装载" default="-1"/>
+		<column name="content" required="false" type="VARCHAR" size="255" description="文本信息"/>
+		<column name="seq" required="true" type="INTEGER" default="0" description="seq"/>
+		<column name="cast_id" required="true" type="INTEGER"  default="0" description="cast_id"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_monitor">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="cast_cpm" idMethod="native" description="视频内投放的每日目标量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="广告投放id"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数,为0表示非CPM类投放"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数,为0表示非CPC类投放"/>
+		<column name="lun" required="false" type="VARCHAR" size="50" description="当天需要投放的轮数和总轮数,5/10表示投10轮的5轮"/>
+		<column name="percent" required="false" type="INTEGER" description="当天需要投放的百分比,为0表示非百分比类型"/>
+		<column name="cpv" required="false" type="INTEGER" default="0" description="当天需要投放的cpv数,为0表示非CPV类投放"/>
+		<column name="cpp" required="false" type="INTEGER" default="0" description="当天需要投放的cpp数,为0表示非CPP类投放"/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description="当初次insert时dc_id为0，后面再update"/>
+		<column name="dc_id2" required="true" type="INTEGER" default="0" description="当初次insert时dc2_id为0，后面再update"/>
+		<column name="target_date" required="true" type="DATE" description="数据日期，准确到天"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_cpm">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_idea" idMethod="none" description="cast_idea">
+		<column name="id" required="true" primaryKey="true" type="BIGINT" autoIncrement="false" description="id,非自增"/>
+		<column name="cast_id" required="false" type="INTEGER" description="广告投放id"/>
+        <column name="idea_id" required="false" type="INTEGER" description="素材ID"/>
+		<column name="update_time" required="true" type="DATE" description="not null"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 -1无效"/>
+		<column name="issdk" required="true" type="INTEGER" default="1" description="是否采用SDK监测,仅移动APP此字段有含义, 0 API监控方式 1 SDK监控方式 默认0"/>
+		<column name="iesorg" required="false" type="VARCHAR" size="255" description="ies监测机构,没有时为空字符串"/>
+		<column name="cuf" required="true" type="INTEGER" description="0=browser，1=webview；增加参数值：2=app内播放页，3=app内节目页，4=app内专题页" />
+		<column name="mst" required="false" type="INTEGER" default="0" description="监测发送方式"/>
+		<column name="monitor_add_type" required="false" type="INTEGER" default="0" description="监测类型 0-默认值，1-miaozhen"/>
+	</table>
+	
+	<table name="idea_cpm" idMethod="native" description="视频内素材的每日目标量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="广告素材id"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数"/>
+		<column name="rate" required="false" type="INTEGER" description="素材占所属投放的投放量比例"/>
+		<column name="cpv" required="false" type="INTEGER" default="0" description="当天需要投放的cpv数"/>
+		<column name="cpp" required="false" type="INTEGER" default="0" description="当天需要投放的cpp数"/>
+		<column name="target_date" required="true" type="DATE" description="数据日期，准确到天"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_cpm">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+
+	</table>
+
+	<table name="dc" idMethod="native" description="调度中心分配量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="target_date" required="true" type="DATE" description="投放日期"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数"/>
+		<column name="cpv" required="false" type="INTEGER" default="0" description="当天需要投放的cpv数"/>
+		<column name="cpp" required="false" type="INTEGER" default="0" description="当天需要投放的cpp数"/>
+	</table>
+	
+	<table name="idea_time" idMethod="native" description="视频内广告的具体定向时间">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="广告素材id"/>
+		<column name="startTime" required="true" type="TIMESTAMP" description="投放有效日期开始时间，24小时制"/>
+		<column name="endTime" required="true" type="TIMESTAMP" description="投放有效日期结束时间，24小时制"/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description="当初次insert时dc_id为0，后面再update"/>
+		<column name="dc_id2" required="true" type="INTEGER" default="0" description="当初次insert时dc2_id为0，后面再update"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 -1无效    "/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_time">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id_time">
+			<reference local="dc_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id2_time">
+            <reference local="dc_id2" foreign="id"/>
+        </foreign-key>
+	</table>
+	<table name="hcast_cpm" idMethod="native" description="页面投放的每日目标量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="广告投放id"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数,为0表示非CPM类投放"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数,为0表示非CPC类投放"/>
+		<column name="lun" required="false" type="VARCHAR" size="50" description="当天需要投放的轮数和总轮数,5/10表示投10轮的5轮"/>
+		<column name="percent" required="false" type="INTEGER" description="当天需要投放的百分比,为0表示非百分比类型"/>
+		<column name="target_date" required="true" type="DATE" description="数据日期，准确到天"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_hcpm">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="hidea_cpm" idMethod="native" description="页面素材的每日目标量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="广告素材id"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数"/>
+		<column name="rate" required="false" type="INTEGER" description="素材占所属投放的投放量比例"/>
+		<column name="target_date" required="true" type="DATE" description="数据日期，准确到天"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_hcpm">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="hidea_time" idMethod="native" description="页面广告的具体定向时间">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="广告素材id"/>
+		<column name="startTime" required="true" type="TIMESTAMP" description="投放有效日期开始时间，24小时制"/>
+		<column name="endTime" required="true" type="TIMESTAMP" description="投放有效日期结束时间，24小时制"/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description="当初次insert时dc_id为0，后面再update"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态,状态: 1有效 -1无效    "/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_htime">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id_htime">
+			<reference local="dc_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+		<table name="vhcast_cpm" idMethod="native" description="播放页面投放的每日目标量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="广告投放id"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数,为0表示非CPM类投放"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数,为0表示非CPC类投放"/>
+		<column name="lun" required="false" type="VARCHAR" size="50" description="当天需要投放的轮数和总轮数,5/10表示投10轮的5轮"/>
+		<column name="percent" required="false" type="INTEGER" description="当天需要投放的百分比,为0表示非百分比类型"/>
+		<column name="target_date" required="true" type="DATE" description="数据日期，准确到天"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_vhcpm">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="vhidea_cpm" idMethod="native" description="页面素材的每日目标量">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="广告素材id"/>
+		<column name="cpm" required="false" type="INTEGER" description="当天需要投放的cpm数"/>
+		<column name="cpc" required="false" type="INTEGER" description="当天需要投放的cpc数"/>
+		<column name="rate" required="false" type="INTEGER" description="素材占所属投放的投放量比例"/>
+		<column name="target_date" required="true" type="DATE" description="数据日期，准确到天"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_vhcpm">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="vhidea_time" idMethod="native" description="页面广告的具体定向时间">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="idea_id" required="true" type="INTEGER" description="广告素材id"/>
+		<column name="startTime" required="true" type="TIMESTAMP" description="投放有效日期开始时间，24小时制"/>
+		<column name="endTime" required="true" type="TIMESTAMP" description="投放有效日期结束时间，24小时制"/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description="当初次insert时dc_id为0，后面再update"/>		
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 -1无效    "/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_vhtime">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id_vhtime">
+			<reference local="dc_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="hot_video" idMethod="none" description="热点视频" skipSql="false" abstract="false">
+		<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="false" description="id, 非自增" protected="false" inheritance="false" /> 
+		<column name="name" required="true" type="VARCHAR" size="255" description="热点视频标识name" primaryKey="false" protected="false" inheritance="false" />
+		<column name="url" required="true" type="VARCHAR" size="100" description="热点视频地址" primaryKey="false" protected="false" inheritance="false" />
+		<column name="status" required="true" type="INTEGER"  default="1" description="状态(人工设定)：true/1-有效 false/-1-失效" primaryKey="false" protected="false" inheritance="false" />
+	    <column name="update_time" required="true" type="TIMESTAMP" description="记录修改时间"/>
+		<column name="expired_ime" required="true" type="TIMESTAMP" description="记录失效时间"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="热点视频描述" primaryKey="false" protected="false" inheritance="false" /> 
+	</table>
+	<table name="vh_position_map" idMethod="none" description="页面广告位置生成表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="block_id" required="true" type="INTEGER" description="block_id"/>
+		<column name="v_position_id" required="true" type="INTEGER" description="贴片广告位置"/>
+	</table>
+	<!-- 计数使用　tang 2014-6-5 -->
+	<table name="count_ini" idMethod="none" description="点击统计系统的配置表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="name" required="false" type="VARCHAR" size="255" description="名称"/>
+		<column name="type" required="false" type="VARCHAR" size="255" description="类型，1=只需要计数；2=需要计数加跳转"/>
+		<column name="url" required="false" type="VARCHAR" size="1000" description="跳转链接"/>
+	</table>
+
+	<table name="rtb_idea_url" idMethod="none" description="RTB素材地址表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="url" required="true" type="VARCHAR" size="255" description="素材URL"/>
+		<column name="dsp_id" required="true" type="VARCHAR" size="255" description="DSPID"/>
+		<column name="startTime" required="true" type="TIMESTAMP" description="开始投放时间"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态，1可用，0过期"/>
+	</table>
+	<table name="preview" idMethod="none" description="截图使用表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="channel_id" required="true" type="VARCHAR" size="50" description="id"/>
+		<column name="type" required="false" type="VARCHAR" size="255" description="类型"/>
+		<column name="url" required="false" type="VARCHAR" size="1000" description="存放地址"/>
+	</table>
+	
+	<!-- tang SDK 配置 开始 -->
+	<table name="sdk_name" idMethod="native" description="移动sdk表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="name" required="false" type="VARCHAR" size="255" description="名称"/>
+		<column name="status" required="false" type="INTEGER" description="状态"/>
+	</table>
+	<table name="sdk_device" idMethod="native" description="sdk设备表">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id, 自增"/>
+   			<column name="name" required="true" type="VARCHAR" size="32" description="设备名称，如：Android、iphone、ipad"/>
+  </table>
+   	
+	<table name="sdk_config" idMethod="native" description="sdk资源配置表">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id, 自增"/>
+   			<column name="device_id" required="true" type="INTEGER" description="设备类型，sdk_device表id"/>
+   			<column name="ad_type_id" required="true" type="INTEGER" description="广告类型，ad_type表id"/>
+   			<column name="sdk_id" required="true" type="INTEGER" description="接入方，sdk_name表id"/>
+   			<column name="status" required="true" type="INTEGER" size="2" default="1" description="状态，2手动，1自动，0失效"/>
+   			<column name="manual_percent" required="true" type="INTEGER" default="0" size="12" description="手动百分比"/>
+   			<column name="auto_percent" required="true" type="INTEGER" default="0" size="12" description="自动百分比"/>
+   			<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+   			<column name="idea_id" required="true" type="INTEGER" description="素材Id"/>
+   			<foreign-key foreignTable="sdk_device" name="fk_sdk_config_device_id">
+						<reference local="device_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="ad_type" name="fk_sdk_config_adType_fkid">
+						<reference local="ad_type_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="sdk_name" name="fk_sdk_config_sdkName_fkid">
+						<reference local="sdk_id" foreign="id"/>
+				</foreign-key>
+  </table>
+   	
+  <table name="sdk_config_log" idMethod="native" description="sdk资源配置日志表，用于记录自动配比的历史记录">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id, 自增"/>
+   			<column name="device_id" required="true" type="INTEGER" description="设备类型，sdk_device表id"/>
+   			<column name="ad_type_id" required="true" type="INTEGER" description="广告类型，ad_type表id"/>
+   			<column name="sdk_id" required="true" type="INTEGER" description="接入方，sdk_name表id"/>
+   			<column name="percent" required="true" type="INTEGER" description="百分比"/>
+   			<column name="create_date" required="true" type="TIMESTAMP" description="日期"/>
+   			<foreign-key foreignTable="sdk_device" name="fk_sdk_config_log_device_id">
+						<reference local="device_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="ad_type" name="fk_sdk_config_log_adType_fkid">
+						<reference local="ad_type_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="sdk_name" name="fk_sdk_config_log_sdkName_fkid">
+						<reference local="sdk_id" foreign="id"/>
+				</foreign-key>
+  </table>
+   	
+  <table name="sdk_log" idMethod="native" description="sdk数据效果日志">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id, 自增"/>
+   			<column name="sdk_device_id" required="true" type="INTEGER" description="设备类型，sdk_device表id"/>
+   			<column name="ad_type_id" required="true" type="INTEGER" description="广告类型，ad_type表id"/>
+   			<column name="sdk_id" required="true" type="INTEGER" description="接入方，sdk_name表id"/>
+   			<column name="filling_rate" required="true" type="FLOAT" description="填充率"/>   			  			
+   			<column name="show_num" required="true" type="INTEGER" size="12" description="展示量"/>
+   			<column name="click_num" required="true" type="INTEGER" size="12" description="点击量"/>
+   			<column name="income" required="true" type="FLOAT" description="收益"/>
+   			<column name="atmshow" required="true" type="INTEGER" size="12" description="atm曝光量"/>
+   			<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+   			<column name="idea_id" required="true" type="INTEGER" description="素材Id"/>
+   			<column name="create_date" required="true" type="TIMESTAMP" description="日期"/>
+   			<foreign-key foreignTable="sdk_device" name="fk_sdk_log_device_id">
+						<reference local="sdk_device_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="ad_type" name="fk_sdk_log_adType_fkid">
+						<reference local="ad_type_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="sdk_name" name="fk_sdk_log_sdkName_fkid">
+						<reference local="sdk_id" foreign="id"/>
+				</foreign-key>
+  </table>
+  
+	<table name="ad_mutex" idMethod="native" description="互斥关系记录表,举例：A对于B,C,D互斥">
+		<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id, 自增"/>
+		<column name="mutex_id" required="true" type="INTEGER" description="adm生成的互斥数据id"/>
+		<column name="subject_type" required="true" type="INTEGER" description="互斥类型,1:广告主，2:素材地址，3:素材id，4:行业或品类"/>
+		<column name="subject_value" required="true" type="VARCHAR" description="互斥的value"/>
+		<column name="object_type" required="true" type="INTEGER" description="被互斥类型，1:广告主，2:素材地址，3:素材id，4:行业或品类"/>
+		<column name="object_value" required="true" type="VARCHAR" size="255" description="被互斥value"/>
+		<column name="ad_type" required="true" type="VARCHAR" size="32" description="广告类型1 前贴:f,暂停:p，中插1:o_0,中插2:o_1,中插3:o_2"/>
+		<column name="sub_Ad_Type" required="true" type="VARCHAR" size="32" description="广告类型2 前贴:f,暂停:p，中插1:o_0,中插2:o_1,中插3:o_2"/>
+		<column name="update_time" required="true" type="DATE" description="更新时间"/>
+		<column name="start_time" required="true" type="DATE" description="生效开始时间"/>
+		<column name="end_time" required="true" type="DATE" description="生效结束时间"/>
+		<column name="status" required="true" type="INTEGER" default="1" description="状态: 1有效 0无效 "/>			
+  	</table>
+
+  <table name="cast_config" idMethod="native" description="cast配置表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_key" required="true"  type="VARCHAR" size="256" description="配置的key"/>
+		<column name="cast_value" required="false" type="LONGVARCHAR"  description="配置的value"/>
+  </table>
+
+	<table name="cast_scene" idMethod="native" description="场景标签定向">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 scene"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 "/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_scene">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_goods" idMethod="native" description="商品分类定向">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放ID"/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description="定向名称 goods"/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description="定向值 "/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description="1 正定向 0反定向"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_goods">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+
+	<table name="idea_thumbnail" idMethod="native" description="素材url缩略图表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"  autoIncrement="true"  description="id,自增"/>
+		<column name="thumbnail_id" required="true" type="VARCHAR"  size="255"  description="缩略图id"/>
+		<column name="idea_url_id" required="true" type="INTEGER" description="素材URL的id"/>
+		<column name="title" required="false" type="VARCHAR" size="512" description="标题"/>
+		<column name="thumbnail_url" required="false" type="VARCHAR" size="512" description="缩略图地址"/>
+		<column name="update_time" required="true" type="TIMESTAMP" description="修改时间"/>
+		<foreign-key foreignTable="idea_url" name="fk_idea_url_id">
+			<reference local="idea_url_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="blacklist" idMethod="native" description="黑名单表：黑名单ip，白名单IMEI">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"  autoIncrement="true"  description="id,自增"/>
+		<column name="type" required="true" type="VARCHAR"  size="20"  description="限定类型"/>
+        <column name="value" required="true" type="VARCHAR"  size="15"  description="限定值"/>
+	</table>
+	
+	<table name="ad_position" idMethod="native" description="ssp二期新广告位列表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"  autoIncrement="false"  description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR"  size="2000"  description="名称，格式：媒体_终端_资源类型_广告位类型_广告位子类型_序号，如“优酷PC前贴第一贴”的名称为：优酷_PCWEB_框内_前贴_1"/>
+        <column name="media" required="true" type="VARCHAR"  size="128"  description="媒体"/>
+		<column name="device" required="true" type="VARCHAR"  size="128"  description="终端"/>
+		<column name="type" required="true" type="VARCHAR"  size="128"  description="资源类型 框内资源 框外资源"/>
+		<column name="pos_type" required="true" type="VARCHAR"  size="128"  description="广告位类型 ：前贴  一级页面 开机图 等等"/>
+		<column name="pos_sub_type" required="true" type="VARCHAR"  size="128"  description="广告位子类型：框内资源此字段表示位次 页面资源表示二级页面"/>
+		<column name="req_point" required="true" type="VARCHAR"  size="128"  description="请求点id"/>
+		<column name="page_comment" required="true" type="VARCHAR"  size="2000"  description="页面描述"/>
+		<column name="place" required="true" type="VARCHAR"  size="128"  description="渠道"/>
+		<column name="page_size" required="true" type="VARCHAR"  size="128"  description="尺寸"/>
+		<column name="template" required="true" type="VARCHAR"  size="128"  description="模板"/>
+		<column name="seq_num" required="true" type="VARCHAR"  size="128"  description="序号 中插2-1表示"/>
+		<column name="old_id" required="true" type="VARCHAR"  size="128"  description="旧广告位id"/>
+		<column name="value" required="true" type="VARCHAR"  size="128"  description="广告位取值"/>
+		<column name="update_time" required="true" type="VARCHAR"  size="128"  description="更新时间"/>
+		<column name="status" required="true" type="VARCHAR"  size="11"  description="状态：1：生效 0：失效 -1：删除"/>
+	</table>
+
+
+	<!-- SDK 配置 结束 -->
+	<!--
+	<table name="page" idMethod="none" description="含有广告位的广告页面">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="描述"/>
+		<column name="status" required="false" type="INTEGER" default="1" description="状态,1为活跃，0为停止"/>
+		<column name="site" required="false" default="1" type="INTEGER" description="优酷的还是土豆的；优酷：1  土豆：-1"/>
+	</table>
+	<table name="block" idMethod="none" description="广告块">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="描述"/>
+		<column name="htmlcode" required="false" type="LONGVARCHAR" size="2000" description="显示的html代码"/>
+		<column name="status" required="false" type="INTEGER" default="1" description="状态,1为活跃，0为停止"/>
+		<column name="page_id" required="false" type="INTEGER" description="所属页面id"/>
+		<column name="site" required="false" default="1" type="INTEGER" description="优酷的还是土豆的；优酷：1  土豆：-1"/>
+		<foreign-key foreignTable="page" name="fk_page_id">
+			<reference local="page_id" foreign="id"/>
+		</foreign-key>
+	</table> 
+	<table name="h_position" idMethod="none" description="广告位">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="描述"/>
+		<column name="width" required="true" type="INTEGER" description="宽"/>
+		<column name="height" required="true" type="INTEGER" description="高"/>
+		<column name="page_id" required="false" type="INTEGER" description="所属页面id"/>
+		<column name="block_id" required="false" type="INTEGER" description="所属块id"/>
+		<column name="status" required="false" type="INTEGER" default="1" description="状态,1为活跃，为0停止"/>
+		<column name="isEditable" required="false" type="INTEGER" default="-1" description="1为可以修改，-1为不可以修改"/>
+		<column name="price" required="false" type="VARCHAR" size="255" description="刊例编码，对应刊例表的code字段(作废)"/>
+		<column name="alias" required="false" type="VARCHAR" size="255" description="别名，用于在资源预订的时候显示"/>
+		<column name="isShow" required="false" type="VARCHAR" size="255" description="资源预订的时候是否显示，默认为0=显示，-1=不显示, 1=仅管理员显示, 2=仅投放显示"/>
+		<column name="show_index" required="false" type="INTEGER" description="设置资源预订时的显示顺序，1为最高优先级"/>
+		<column name="max_ad_num" required="false" type="INTEGER" default="1" description="当前广告位上每天可以预订的广告合同最大值，0为一个都不能订，-1为不限制"/>
+		<column name="p_type" required="false" type="INTEGER" default="1" description="广告位类型 1：标准广告位，2：通用派生广告位，3：合同派生广告位" /> 
+		<column name="parent_id" required="false" type="INTEGER" default="-1" description="父广告位id，如果当前广告位是标准广告位，此字段为-1" />
+		<column name="order_id" required="false" type="INTEGER" default="-1" description="合同id，如果当前广告位是标准广告位或通用派生广告位，此字段为-1" />
+		<column name="unit" required="false" type="INTEGER" default="-1" description="价格计算方式，1=按CPM，2=按天，标准广告位和派生广告位为-1，请从postion_quotation表查询" /> 
+		<column name="p_price" required="false" type="INTEGER" default="0" description="派生广告位的单价，元为计价单位" /> 
+		<column name="res_type" required="false" type="VARCHAR" size="255" default="-1" description="广告资源类型" /> 
+		<column name="cast_sign" required="false" type="INTEGER" default="0" description="投放标识：0为系统投放，1为非系统投放" /> 
+		<column name="price_type" required="true" type="INTEGER" default="-1" description="价格类型: 0为刊例价，1为净价"/>
+		<column name="site" required="false" default="1" type="INTEGER" description="优酷的还是土豆的；优酷：1  土豆：-1"/>
+		<foreign-key foreignTable="page" name="fk_page_id">
+			<reference local="page_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="block" name="fk_block_id">
+			<reference local="block_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="h_position" name="fk_parent_id" onUpdate="none" onDelete="none">
+			 <reference local="parent_id" foreign="id" /> 
+		 </foreign-key>
+
+	</table>
+	<table name="position_map" idMethod="none" description="页面广告位置生成表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="ad_type_id" required="true" type="INTEGER" description="广告类型"/>
+		<column name="channel_id" required="true" type="VARCHAR" size="50" description="地区"/>
+		<column name="v_position_id" required="true" type="INTEGER" description="贴片广告位置"/>
+		<column name="cast_page_value" required="true" type="INTEGER" description="cast_page中的value值"/>
+		<column name="h_position_id" required="true" type="INTEGER" description="页面广告类型"/>
+	</table>
+	-->
+	
+	<!--TODO 确定鸟，每天的轮数是可能不同的，该表跟cast_cpm重复，要舍弃掉-->
+	<!--<table name="cast_lunbo" idMethod="native" description="投放轮播表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="lun" required="true" type="INTEGER" description="投放在第几轮"/>
+		<column name="total_lun" required="true" type="INTEGER" description="总轮次"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>-->
+	
+	<!--TODO 确定鸟，每天的priority都相同,转移到ad_cast投放表-->
+	<!--<table name="ration_optimize" idMethod="native" description="定量优化表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="priority" required="true" type="INTEGER" description="投放优先级"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>-->
+	<!--TODO 确定鸟，每天的percent可能都不相同，percent的值转到cast_cpm中-->	
+	<!--<table name="cast_percent" idMethod="native" description="投放百分比">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="percent" required="true" type="FLOAT" description="占剧场相关投放位置容量的比例"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	-->
+
+</database>

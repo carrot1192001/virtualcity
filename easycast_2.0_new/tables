@@ -1,0 +1,24 @@
+delete from cast_campaign;
+delete from campaign;
+delete from idea_survey;
+delete from idea_cpm;
+delete from idea_monitor;
+delete from idea_url;
+delete from idea_time;
+delete from dc;
+delete from idea;
+delete from cast_prd;
+delete from cast_paid;
+delete from cast_key;
+delete from cast_dq;
+delete from cast_partnerid;
+delete from cast_user;
+delete from cast_videogroup;
+delete from cast_platform;
+delete from cast_cpm;
+delete from cast_position;
+delete from cast_channel;
+delete from cast_area;
+delete from ad_cast;
+
+delete from ad_order;

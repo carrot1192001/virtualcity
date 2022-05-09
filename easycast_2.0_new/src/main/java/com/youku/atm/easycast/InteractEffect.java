@@ -1,0 +1,61 @@
+package com.youku.atm.easycast;
+
+public class InteractEffect {
+	
+	public static final int NORMAL = 1; // 常规
+	public static final int FULL = 2; // 5秒全屏
+	public static final int MUTUAL = 3; // 互动
+	public static final int CRAZY = 4; // crazy
+	public static final int ADSELECTOR = 5; // adselector
+	public static final int TRUEVIEW = 6; // TureView广告
+	public static final int SDK = 7; // 移动sdk广告
+	public static final int VR = 25; // 全景
+	public static final int VRTRUEVIEW = 26; // 全景可跳过
+	public static final int MUTUAL_V2 = 23; // 互动广告二期
+	public static final int MUTUAL_TRUEVIEW = 27; // 互动可跳过
+	public static final int RED_PACKET = 28; // 红包
+	public static final int FOCUS = 30; // 开机图超级聚焦
+	public static final int DYNAMIC = 31; // 开机图动态
+	public static final int INFOFLOW_VIDEO = 32; // 视频类信息流
+	public static final int MUT_STARTUP_VIDEO = 34; //互动视频开机图
+	public static final int STARTUP_VIDEO = 43; // 视频开机图
+	public static final int FLOATING_LAYER=35;//下压浮层
+	public static final int UC_INFO_SMALLIMG = 36; // UC信息流小图
+	public static final int UC_INFO_COMBINATIONIMG = 37; // UC信息流组图
+	public static final int UC_INFO_VIDEO = 38; // UC信息流视频
+	public static final int UC_INFO_BIGIMG = 39; // UC信息流大图
+	public static final int GIF_DYNAMIC_KAIJITU = 40; // uc gif动态开屏
+	public static final int SCENE_BANNER = 48; // 压屏条
+	public static final int SCENE_NORMAL = 49; // 普通场景
+	public static final int LOTTIE = 50; // UC信息流Lottie卡片广告
+	public static final int SHOT_VIDEO = 51; // UC短视频沉浸式播放页广告
+	public static final int MUTUAL_PRE= 56; // 互动贴片
+	public static final int SELFDEFINEFLOAT= 60; // 自定义浮层（60）
+    public static final int MFULL_SCREEN = 146; // 移动全屏
+	public static final int MUTUAL_JIF = 46;//互动GIF开机图
+	public static final int OTTSCREENSAVER = 136;//OTT全屏图片（136）
+	public static final int OTTDISVIDEO = 41;//OTT开机视频（41）
+	public static final int OTTDISREC = 136;//OTT全屏图片（136）
+	public static final int OTTPOWEROFF = 136;//OTT全屏图片（136）
+	public static final int YKINFOPIC = 54;//优酷图片信息流广告（54）
+	public static final int YKINFOVIDEO = 32;//优酷视频信息流广告（32）
+	public static final int PCPLAYSEED = 143;//PC播放页种子视频（143）
+	public static final int MBOPERATOR = 144;//优酷MOB运营商广告logo冠名（144）
+	public static final int MBWENZILIAN = 135;//优酷MOB搜索页文字链（135）
+	public static final int YKHOMEFOCUS = 139;//优酷移动端首页海报（139）
+	public static final int YKCHANNELFOCUS = 145;//优酷移动端频道页海报（145）
+	public static final int XIAMIFOCUS = 140;//虾米移动端海报焦点图（140）
+	public static final int XIAMIBANNER = 117;//虾米移动端banner（117）
+	public static final int YKSEARCHBANNER = 154;//优酷移动端搜索页banner（154）
+	public static final int PHONEWEBBANNER = 116;//phone-web播放页banner（116）	
+	public static final int IPADWEBBANNER = 115;//iPad-web播放页banner（115）
+	public static final int PHONEPLAYBANNER = 114;//phone-app播放页banner（114）
+	public static final int IPADPLAYBANNER = 113;//iPad-app播放页banner（113）
+	public static final int redpacketrain = 148;//红包雨创意效果（148）
+	public static final int taobaoshake = 161;//酷必淘-摇一摇（161）
+	public static final int taobaononshake = 162;//酷必淘-摇一摇（162）
+	public static final int spotlightinfoflow = 147;//看点信息流-大品牌专用（147）-图片
+	public static final int FEEDS_INFOFLOW_VIDEO = 165; // feeds视频类信息流 -视频
+	public static final int KANDAN_PAUSE = 159; //看单暂停	
+	public static final int app_play_banner = 164; //移动APP播放页banner
+}

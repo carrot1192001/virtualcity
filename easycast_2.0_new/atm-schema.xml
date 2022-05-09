@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- 编辑使用 XMLSpy v2006 U (http://www.altova.com) 由 any (any) -->
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_3.dtd">
+<database name="atm" package="com.youku.atm.om">
+	<table name="ad_type" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="show_type" required="true" default="-1" type="INTEGER" description=""/>
+	</table>
+	<table name="ad_order" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="custom_id" required="true"  type="INTEGER"/>
+		<column name="custom_name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="update_time" required="true" type="TIMESTAMP" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="industry_id" required="false"  type="INTEGER" description=""/>
+		<column name="sub_industry_id" required="false"  type="INTEGER" description=""/>
+		<column name="category_id" required="false"  type="INTEGER" description=""/>
+		<column name="marketing_type" required="false"  type="INTEGER" default="0" description=""/>
+	</table>
+	<table name="region" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="city_id" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="province_id" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="start_ip" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="end_ip" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="geoid" required="true" type="VARCHAR" size="100" description=""/>
+	</table>
+
+	<!--级别包括大洲、国家、省份、城市4个级别，需要与CPM团队确定level取值,int型？-->
+	<table name="area" idMethod="none" description="">
+		<!-- id取值:北美洲na,南美:sa,亚洲as,非洲af，大洋洲:oa,欧洲:eu,南极洲:an, 国家使用国际通用id-->
+		<column name="id" required="true" primaryKey="true" type="VARCHAR" size="200" autoIncrement="false" description="id"/>
+		<column name="parent_id" required="true" type="VARCHAR" size="200" description=""/>
+		<column name="level" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="200" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="description" required="false" type="VARCHAR" size="500" description=""/>
+	</table>
+	
+	<!--地区温度城市名字对应表-->
+    <table name="temp_area" idMethod="none" description="">
+        <!-- id取值:北美洲na,南美:sa,亚洲as,非洲af，大洋洲:oa,欧洲:eu,南极洲:an, 国家使用国际通用id-->
+        <column name="id" required="true" primaryKey="true" type="VARCHAR" size="200" autoIncrement="false" description="id"/>
+        <column name="name" required="true" type="VARCHAR" size="200" description=""/>
+    </table>
+    
+	<!--相比CPM，去掉了site字段，将site和znw都放到分类的维度上-->
+	<table name="channel" idMethod="none" description="">
+		<!--id取值：优酷全站:yk,土豆全站:td,优酷站内:ykn,优酷站外ykw,土豆站内:tdn,土豆站外:tdw-->
+		<column name="id" required="true" primaryKey="true" type="VARCHAR" size="50" description="id"/>
+		<column name="parent_id" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="type" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="is_hot" required="true" type="INTEGER" default="0" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="refvalue" required="false" type="VARCHAR" size="500" description=""/>
+		<column name="description" required="false" type="VARCHAR" size="500" description=""/>
+	</table>
+	<table name="crontab_info" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="period" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="task_url" required="true" type="VARCHAR" size="400" description=""/>
+		<column name="ip" required="true" type="VARCHAR" size="40" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="description" required="false" type="VARCHAR" size="255" description=""/>
+	</table>
+	
+	<table name="time_task" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="name" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="period" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="ip" required="true" type="VARCHAR" size="40" description=""/>
+		<column name="interface_name" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="params" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+	</table>
+	
+	<table name="platform" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="brand" required="true" type="VARCHAR" size="10" description=""/>
+		<column name="site" required="true" default="1" type="INTEGER" description=""/>
+		<column name="dt" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="device_model" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="os" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="os_version" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="aw" required="true" type="VARCHAR" size="20" description=""/>
+		<column name="client_version" required="true" type="VARCHAR" size="20" description=""/>
+		<column name="sort_code" required="true" default="1" type="INTEGER" description=""/>
+		<column name="net" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="value" required="true" type="VARCHAR"  size="50" description=""/>
+		<column name="status" required="true" type="INTEGER" description=""/>
+	<unique>
+				<unique-column name="value"/>
+	</unique>
+	</table>
+	<table name="log_config" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="256" description=""/>
+		<column name="code" required="true" type="VARCHAR" size="256" description=""/>
+		<column name="ip" required="true"  type="VARCHAR" size="256"  description=""/>
+		<column name="remoteport" required="true" type="VARCHAR" size="256" description=""/>
+		<column name="localport" required="true" type="VARCHAR" size="256" description=""/>
+		<column name="path" required="true" type="VARCHAR" size="256" description=""/>
+		<column name="site" required="true" type="INTEGER" default="0" description=""/>
+		<column name="log_type" required="true" type="VARCHAR" size="20" default="a" description=""/>				
+		<column name="p_type" required="true" type="INTEGER" default="0" description=""/>
+	</table>
+	<table name="server_config" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="ip" required="true" type="VARCHAR" size="40" description=""/>
+		<column name="role" required="true" type="INTEGER" description=""/>
+		<column name="status" required="true" type="INTEGER" description=""/>
+		<column name="description" required="false" type="VARCHAR" size="255" description=""/>
+	</table>
+	<table name="seed" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="vid" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="url" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="description" required="false" type="LONGVARCHAR" size="2000" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="site" required="true" default="1" type="INTEGER" description=""/>
+		<column name="survey_url" required="false" type="VARCHAR" size="255" description=""/>
+	</table>
+	<table name="copyright_user" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="uid" required="true" type="BIGINT" description=""/>
+		<column name="uname" required="true" type="VARCHAR" size="250" description=""/>
+		<column name="status" required="true" type="INTEGER" default="0" description=""/>
+		<index name="copyright_uid">
+			<index-column name="uid"/>
+		</index>
+	</table>
+	<table name="video_group_list" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="value" required="true" type="LONGVARCHAR" size="20000" description=""/>
+		<column name="update_time" required="true" type="TIMESTAMP" description=""/>
+		<column name="start_time"  type="DATE" description=""/>
+		<column name="end_time"  type="DATE" description=""/>
+		<column name="video_group_id" required="true" type="INTEGER" description=""/>
+		<column name="status" required="true" type="INTEGER" description=""/>
+	</table>
+	<table name="adlen_range" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="v_point_id" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="vlen_low" required="true" type="INTEGER" description=""/>
+		<column name="vlen_high" required="true" type="INTEGER" description=""/>
+		<column name="adlen_max" required="true" type="INTEGER" description=""/>
+		<column name="adcount_max" required="true" type="INTEGER" description=""/>
+		<column name="resource_id" required="true" type="INTEGER" description=""/>
+		<column name="status" required="true" type="INTEGER" description=""/>
+		<column name="isUseRange" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_adlen">
+			<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="v_position" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="parent_id" required="true" type="INTEGER" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="manage_type" required="false" type="VARCHAR" size="10" description=""/>
+		<column name="ps" required="true" type="INTEGER" description=""/>
+		<column name="ad_seq" required="true" type="INTEGER" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+	</table>
+	<table name="h_position" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="parent_id" required="true" type="INTEGER" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="value" required="true" type="INTEGER"  description=""/>
+		<column name="templet" required="true" type="LONGVARCHAR" size="2000" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+	</table>
+	<table name="h_count" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="value" required="true" type="INTEGER"  description=""/>
+	</table>
+
+	
+	<table name="resource" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="level" required="true" type="INTEGER" description=""/>
+	</table>
+	<!-- TODO SUNXIN add position表 -->
+	<table name="overflow_range" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="resource_id" required="true" type="INTEGER" description=""/>
+		<column name="contents" required="true" type="LONGVARCHAR" size="8000" description=""/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_overflow">
+			<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="protect" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="manage_type" required="true" type="VARCHAR" size="255" description=""/>
+        <column name="positions" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="parent" required="true" type="INTEGER" description=""/>
+		<column name="priority" required="true" type="INTEGER" description=""/>
+		<column name="resource_id" required="true" type="INTEGER" description=""/>
+		<column name="color" required="true" type="INTEGER" description=""/>
+		<column name="starttime" required="true" type="DATE" description=""/>
+		<column name="endtime" required="true" type="DATE" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_protect">
+			<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="protect_ad" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="protect_id" required="true" type="INTEGER" description="id"/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="value" required="true" type="VARCHAR" size="255" description=""/>
+		<foreign-key foreignTable="protect" name="fk_protect_id">
+			<reference local="protect_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="resource_direction" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="resource_id" required="true" type="INTEGER" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" description=""/>
+		<foreign-key foreignTable="resource" name="fk_resource_id_resourcedirec">
+		<reference local="resource_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<!--TODO ZYF cp_material_standard素材规格,interact_effect创意扩展 的含义，packageid产品包id-->
+	<table name="ad_cast" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="order_id" required="true" type="INTEGER" description=""/>
+		<column name="customer_id" required="true" type="INTEGER" description=""/>
+		<column name="product_id" required="true" type="INTEGER" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="ad_type_id" required="true" type="INTEGER" description=""/>
+		<!-- TODO ZYF 取值范围整理-->
+		<column name="direct_way" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="cast_way" required="true" type="VARCHAR" size="100" description=""/>
+		<column name="interact_effect" required="true" type="INTEGER" description=""/>
+		<column name="is_copyright" required="true" type="INTEGER" description="" default="0"/>
+		<column name="price" required="true" type="DOUBLE" description="" default="0"/>
+		<column name="speed_type" required="true" type="INTEGER" description="" default="0"/>
+		<!--TODO 产品待定,是否需要另外一个产品优先级，或直接使用vip的优先级-->
+		<column name="type_priority" required="true" type="INTEGER" description=""/>
+		<column name="product_priority" required="true" type="INTEGER" description=""/>
+		<column name="vip_priority" required="true" type="INTEGER" description=""/>
+		<column name="order_priority" required="true" type="INTEGER" description=""/>
+		<column name="custom_priority" required="true" type="INTEGER" description=""/>
+		<column name="custom_num_priority" required="true" type="INTEGER" description=""/>
+		<column name="camp_priority" required="true" type="INTEGER" description=""/>
+		<column name="area_priority" required="true" type="INTEGER" description=""/>
+		<column name="channel_priority" required="true" type="INTEGER" description=""/>
+		<column name="platform_priority" required="true" type="INTEGER" description=""/>
+		<column name="user_priority" required="true" type="INTEGER" description=""/>
+		<column name="keyword_priority" required="true" type="INTEGER" description=""/>
+		<column name="videogroup_priority" required="true" type="INTEGER" description=""/>
+		<column name="ro_priority" required="true" type="INTEGER" description=""/>
+		<column name="sow_type" required="false" default="0" type="INTEGER" description=""/>
+		<column name="rate_m" required="false" default="0" type="INTEGER" description=""/>
+		<column name="rates" required="false" default="100" type="INTEGER" description="" />
+		<column name="threshold" required="false" default="0" type="DOUBLE"  description=""/>
+		<column name="rtb_type" required="false" default="0" type="INTEGER"  description=""/>
+		<column name="update_time" required="true" type="TIMESTAMP" description=""/>
+		<column name="start_date" required="true" type="DATE" description=""/>
+		<column name="end_date" required="true" type="DATE" description=""/>
+		<!--caolei-->
+		<column name="rtbid" required="false" type="INTEGER" default="0" description=""/>
+		<column name="idea_show_type" required="true" type="INTEGER" description=""/>
+		<column name="main_cast_id" required="true" type="INTEGER" default="0" description=""/>
+		<column name="is_bak" required="false" default="0" type="INTEGER"  description=""/>
+		<column name="dsp_id" required="true" type="VARCHAR" size="100" default="0" description="dsp id"/>
+		<column name="deal_id" required="true" type="VARCHAR" size="100" default="0" description="deal id"/>
+		<column name="skip_time" required="true" type="INTEGER" default="0" description="skip_time"/>
+		<column name="direct_type" required="true" type="INTEGER" default="0" description=""/>
+		<column name="pdb_type" required="true" type="INTEGER" default="0" description=""/>
+		<column name="danger_ip_weight" required="true" type="INTEGER" default="0" description=""/>
+        <column name="charge_type" required="true" type="INTEGER" default="0" description=""/>
+		<column name="is_aiid_ta" required="true" type="INTEGER" default="0" description="is_aiid_ta"/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="mutex" required="true" type="INTEGER" default="0" description=""/>
+		<column name="charge_time" required="true" type="INTEGER" default="0" description="charge_time"/>
+		<column name="resource_type" required="true" type="VARCHAR" size="1000" default="" description=""/>
+		<column name="outside" required="true" type="INTEGER" default="0" description=""/>	
+		<column name="pbak" required="true" type="INTEGER" default="0" description=""/>
+		<column name="is_area" required="true" type="INTEGER" default="0" description=""/>
+		<foreign-key foreignTable="ad_type" name="fk_ad_type_id_adcast">
+			<reference local="ad_type_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="ad_order" name="fk_ad_order_id_adcast">
+			<reference local="order_id" foreign="id"/>
+		</foreign-key>
+
+	</table>
+
+	
+	<table name="cast_channel" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_channel">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="channel" name="fk_channel_id_cast">
+			<reference local="direct_value" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="cast_area" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<!-- TODO ZDW direct_name取值范围-->
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_area">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="area" name="fk_area_id_cast">
+			<reference local="direct_value" foreign="id"/>
+		</foreign-key>
+	</table>
+	<!--需新增平台相关表-->
+	<table name="cast_platform" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="50" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_platform">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="platform" name="fk_platform_value_cast">
+			<reference local="direct_value" foreign="value"/>
+		</foreign-key>
+	</table>
+	<table name="cast_position" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="1000" description=""/>
+		<column name="mutex" required="true" type="INTEGER" description="" default="0"/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_position">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_hposition" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="INTEGER" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_position_h">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="h_position" name="fk_h_position_id_cast">
+			<reference local="direct_value" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="cast_videogroup" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="INTEGER" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_videogrouplist">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_key" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_key">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_user" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_user">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_partnerid" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_partnerid">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_pid" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_pid">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_dq" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_dq">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_campaign" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="campaign_id" required="true" type="INTEGER" description=""/>
+		<column name="campaign_num" required="true" type="VARCHAR" size="200" default="0" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_campaign">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="campaign" name="fk_campaign_id_cast">
+			<reference local="campaign_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_paid" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_paid">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_prd" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_prd">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_tag" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_tag">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_embed" idMethod="native" description="">
+        <column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+        <column name="cast_id" required="true" type="INTEGER" description=""/>
+        <column name="video_id_yk" required="false" type="VARCHAR" size="255" description=""/>
+        <column name="video_id_td" required="false" type="VARCHAR" size="255" description=""/>
+        <column name="break_id" required="true" type="VARCHAR" size="255" description=""/>
+        <column name="start_time" required="true" type="INTEGER" description=""/>
+        <column name="show_time" required="true" type="INTEGER" description=""/>
+        <foreign-key foreignTable="ad_cast" name="fk_cast_id_tag">
+            <reference local="cast_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+	<table name="cast_direction" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<column name="type" required="true" type="INTEGER" default="0" description="type"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_key">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_vip" idMethod="native" description="">
+        <column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+        <column name="cast_id" required="true" type="INTEGER" description=""/>
+        <column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+        <column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+        <column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+        <foreign-key foreignTable="ad_cast" name="fk_cast_id_vip">
+            <reference local="cast_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    
+	<table name="campaign" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="250" description=""/>
+		<column name="type" required="true" type="INTEGER" default="1" description=""/>
+		<column name="start_date" required="true" type="DATE" description=""/>
+		<column name="end_date" required="true" type="DATE" description=""/>
+		<column name="update_time" required="true" type="TIMESTAMP" description=""/>
+		<column name="numlimit" required="true" type="INTEGER" default="0" description=""/>
+		<column name="daylimit" required="true" type="VARCHAR" size="255" default="0" description=""/>
+        <column name="unite" required="true" type="INTEGER" default="0" description=""/>
+        <column name="status" required="true" type="INTEGER" default="1" description=""/>
+	</table>
+
+	
+	<table name="idea" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="name" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="showtime" required="true" type="INTEGER" description=""/>
+		<column name="i_priority" required="true" type="INTEGER" description=""/>
+		<column name="count" required="true" type="INTEGER" description=""/>
+		<column name="numlimit" required="false" type="INTEGER" description="" default="0"/>
+		<column name="dq" required="false" type="VARCHAR" size="255" description="" />
+		<column name="iesorg" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="cuf" required="true" type="INTEGER" description="" />
+		<column name="controlType" required="true" type="INTEGER" description=""/>
+		<column name="issdk" required="true" type="INTEGER" description=""/>
+		<column name="sdkid" required="false" type="INTEGER" default="0" description="sdkid"/>
+		<column name="mst" required="false" type="INTEGER" default="0" description=""/>
+		<column name="location_type" required="false" type="VARCHAR" size="50" description=""/>
+		<column name="close_method" required="true" type="INTEGER" description=""/>
+		<column name="idea_show_location" required="false" type="INTEGER" default="0" description=""/>
+		<column name="control_type_mobile" required="false" type="INTEGER" default="0" description=""/>
+		<column name="charge_time" required="false" type="INTEGER" description="" />
+		<column name="update_time" required="true" type="TIMESTAMP" description=""/>		
+		<column name="play_type" required="true" type="INTEGER" default="0" description="" />		
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="loc_type" required="true" type="VARCHAR" size="50" description="" />	
+		<column name="dp_cuf" required="false" type="INTEGER" default="0" description="deeplink" />
+		<column name="link_type" required="true" type="VARCHAR" size="255" description="link_type" />
+		<column name="link_id" required="true" type="VARCHAR" size="255" description="link_id" />
+		<column name="app_key" required="true" type="VARCHAR" size="255" description="app_key" />
+		<column name="ndisplay_type" required="false" type="INTEGER" default="0" description="ndisplay_type" />
+		<column name="begin_date" required="false" type="DATE" description="" />
+		<column name="end_date" required="false" type="DATE" description="" />
+	</table>
+	
+	<table name="ie" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="new_ie" required="true" type="INTEGER" description=""/>
+		<column name="old_ie" required="true" type="INTEGER" description=""/>
+		<column name="direction" required="true" type="INTEGER" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+	</table>
+	
+	
+	<!-- 单独分出表来存放调研信息的数据表-->
+	<table name="idea_survey" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="stype" required="true" type="INTEGER" description=""/>
+		<column name="site" required="true" type="INTEGER" default="1" description=""/>
+		<column name="aw" required="true" type="VARCHAR" size="10"  description=""/>
+		<column name="survey_url" required="true" type="LONGVARCHAR" size="500" description=""/>
+		<column name="click_url" required="false" type="LONGVARCHAR" size="500" description=""/>
+		<column name="survey_text" required="false" type="LONGVARCHAR" size="32" description=""/>
+		<column name="time_len" required="false" type="INTEGER" default="0"  description=""/>
+		<foreign-key foreignTable="idea" name="fk_survey_idea_id">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="idea_url" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<!-- 曹磊，需进一步确认type的取值含义-->
+		<column name="site" required="true" type="INTEGER" description=""/>
+		<column name="bt" required="true" type="INTEGER" description=""/>
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="os" required="true" type="VARCHAR" size="2" description=""/>
+		<column name="content" required="true" type="LONGVARCHAR" size="2000" description=""/>
+		<column name="title" required="false" type="VARCHAR" size="512" description=""/>
+		<column name="text1" required="false" type="VARCHAR" size="512" description="1"/>
+		<column name="text2" required="false" type="VARCHAR" size="512" description="2"/>
+		<column name="idea_width" required="true" type="INTEGER" description=""/>
+		<column name="idea_height" required="true" type="INTEGER" description=""/>
+        <column name="skip_tx" required="true" type="VARCHAR" description=""/>
+		<column name="display_type" required="true" type="INTEGER" description="display_type"/>
+		<column name="iphonex" required="true" type="INTEGER" description="iphonex"/>
+		<column name="showtime" required="true" type="INTEGER" default="0" description="showtime"/>
+		<column name="seq" required="true" type="INTEGER" default="0" description="seq"/>
+		<column name="bit_rate" required="true" type="VARCHAR" description="bitrate"/>
+		<column name="volume" required="true" type="VARCHAR" description="volume"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_url">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="idea_monitor" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<!-- 曹磊 -->
+		<column name="type" required="true" type="INTEGER" description=""/>
+		<column name="site" required="true" type="INTEGER" description=""/>
+		<column name="bt" required="true" type="INTEGER" description=""/>
+		<column name="url" required="true" type="LONGVARCHAR" size="1000" description=""/>
+		<column name="mt" required="true" type="INTEGER" description="" default="-1"/>
+		<column name="content" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="seq" required="true" type="INTEGER" default="0" description="seq"/>
+		<column name="cast_id" required="true" type="INTEGER"  default="0" description="cast_id"/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_monitor">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="cast_cpm" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="lun" required="false" type="VARCHAR" size="50" description=""/>
+		<column name="percent" required="false" type="INTEGER" description=""/>
+		<column name="cpv" required="false" type="INTEGER" default="0" description=""/>
+		<column name="cpp" required="false" type="INTEGER" default="0" description=""/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description=""/>
+		<column name="dc_id2" required="true" type="INTEGER" default="0" description=""/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_cpm">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="cast_idea" idMethod="none" description="cast_idea">
+		<column name="id" required="true" primaryKey="true" type="BIGINT" autoIncrement="false" description="id"/>
+		<column name="cast_id" required="false" type="INTEGER" description=""/>
+        <column name="idea_id" required="false" type="INTEGER" description=""/>
+		<column name="update_time" required="true" type="DATE" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<column name="issdk" required="true" type="INTEGER" default="1" description=""/>
+		<column name="iesorg" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="cuf" required="true" type="INTEGER" description="" />
+		<column name="mst" required="false" type="INTEGER" default="0" description=""/>
+		<column name="monitor_add_type" required="false" type="INTEGER" default="0" description=""/>
+		<column name="weight" required="false" type="INTEGER" default="0" description=""/>
+		<column name="is_default" required="false" type="INTEGER" default="0" description=""/>
+	</table>
+	
+	<table name="idea_cpm" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="rate" required="false" type="INTEGER" description=""/>
+		<column name="cpv" required="false" type="INTEGER" default="0" description=""/>
+		<column name="cpp" required="false" type="INTEGER" default="0" description=""/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_cpm">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+
+	</table>
+
+	<table name="dc" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="cpv" required="false" type="INTEGER" default="0" description=""/>
+		<column name="cpp" required="false" type="INTEGER" default="0" description=""/>
+	</table>
+	
+	<table name="idea_time" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="startTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="endTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description=""/>
+		<column name="dc_id2" required="true" type="INTEGER" default="0" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_time">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id_time">
+			<reference local="dc_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id2_time">
+            <reference local="dc_id2" foreign="id"/>
+        </foreign-key>
+	</table>
+	<table name="hcast_cpm" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="lun" required="false" type="VARCHAR" size="50" description=""/>
+		<column name="percent" required="false" type="INTEGER" description=""/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_hcpm">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="hidea_cpm" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="rate" required="false" type="INTEGER" description=""/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_hcpm">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="hidea_time" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="startTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="endTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_htime">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id_htime">
+			<reference local="dc_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="vhcast_cpm" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="lun" required="false" type="VARCHAR" size="50" description=""/>
+		<column name="percent" required="false" type="INTEGER" description=""/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_vhcpm">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="vhidea_cpm" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="cpm" required="false" type="INTEGER" description=""/>
+		<column name="cpc" required="false" type="INTEGER" description=""/>
+		<column name="rate" required="false" type="INTEGER" description=""/>
+		<column name="target_date" required="true" type="DATE" description=""/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_vhcpm">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+	<table name="vhidea_time" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="startTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="endTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="dc_id" required="true" type="INTEGER" default="0" description=""/>		
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="idea" name="fk_idea_id_vhtime">
+			<reference local="idea_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="dc" name="fk_dc_id_vhtime">
+			<reference local="dc_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	
+	<table name="hot_video" idMethod="none" description="" skipSql="false" abstract="false">
+		<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="false" description="id" protected="false" inheritance="false" /> 
+		<column name="name" required="true" type="VARCHAR" size="255" description="" primaryKey="false" protected="false" inheritance="false" />
+		<column name="url" required="true" type="VARCHAR" size="100" description="" primaryKey="false" protected="false" inheritance="false" />
+		<column name="status" required="true" type="INTEGER"  default="1" description="" primaryKey="false" protected="false" inheritance="false" />
+	    <column name="update_time" required="true" type="TIMESTAMP" description=""/>
+		<column name="expired_ime" required="true" type="TIMESTAMP" description=""/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="" primaryKey="false" protected="false" inheritance="false" /> 
+	</table>
+	<table name="vh_position_map" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="block_id" required="true" type="INTEGER" description="block_id"/>
+		<column name="v_position_id" required="true" type="INTEGER" description=""/>
+	</table>
+	<!-- 计数使用　tang 2014-6-5 -->
+	<table name="count_ini" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="type" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="url" required="false" type="VARCHAR" size="1000" description=""/>
+	</table>
+
+	<table name="rtb_idea_url" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="url" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="dsp_id" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="startTime" required="true" type="TIMESTAMP" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>
+	</table>
+	<table name="preview" idMethod="none" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id"/>
+		<column name="channel_id" required="true" type="VARCHAR" size="50" description="id"/>
+		<column name="type" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="url" required="false" type="VARCHAR" size="1000" description=""/>
+	</table>
+	
+	<!-- tang SDK 配置 开始 -->
+	<table name="sdk_name" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="status" required="false" type="INTEGER" description=""/>
+	</table>
+	<table name="sdk_device" idMethod="native" description="">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id"/>
+   			<column name="name" required="true" type="VARCHAR" size="32" description=""/>
+    </table>
+   	
+	<table name="sdk_config" idMethod="native" description="">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id"/>
+   			<column name="device_id" required="true" type="INTEGER" description=""/>
+   			<column name="ad_type_id" required="true" type="INTEGER" description=""/>
+   			<column name="sdk_id" required="true" type="INTEGER" description=""/>
+   			<column name="status" required="true" type="INTEGER" size="2" default="1" description=""/>
+   			<column name="manual_percent" required="true" type="INTEGER" default="0" size="12" description=""/>
+   			<column name="auto_percent" required="true" type="INTEGER" default="0" size="12" description=""/>
+   			<column name="cast_id" required="true" type="INTEGER" description=""/>
+   			<column name="idea_id" required="true" type="INTEGER" description=""/>
+   			<foreign-key foreignTable="sdk_device" name="fk_sdk_config_device_id">
+						<reference local="device_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="ad_type" name="fk_sdk_config_adType_fkid">
+						<reference local="ad_type_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="sdk_name" name="fk_sdk_config_sdkName_fkid">
+						<reference local="sdk_id" foreign="id"/>
+				</foreign-key>
+    </table>
+   	
+  <table name="sdk_config_log" idMethod="native" description="">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id"/>
+   			<column name="device_id" required="true" type="INTEGER" description=""/>
+   			<column name="ad_type_id" required="true" type="INTEGER" description=""/>
+   			<column name="sdk_id" required="true" type="INTEGER" description=""/>
+   			<column name="percent" required="true" type="INTEGER" description=""/>
+   			<column name="create_date" required="true" type="TIMESTAMP" description=""/>
+   			<foreign-key foreignTable="sdk_device" name="fk_sdk_config_log_device_id">
+						<reference local="device_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="ad_type" name="fk_sdk_config_log_adType_fkid">
+						<reference local="ad_type_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="sdk_name" name="fk_sdk_config_log_sdkName_fkid">
+						<reference local="sdk_id" foreign="id"/>
+				</foreign-key>
+  </table>
+   	
+  <table name="sdk_log" idMethod="native" description="">
+   			<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id"/>
+   			<column name="sdk_device_id" required="true" type="INTEGER" description=""/>
+   			<column name="ad_type_id" required="true" type="INTEGER" description=""/>
+   			<column name="sdk_id" required="true" type="INTEGER" description=""/>
+   			<column name="filling_rate" required="true" type="FLOAT" description=""/>   			  			
+   			<column name="show_num" required="true" type="INTEGER" size="12" description=""/>
+   			<column name="click_num" required="true" type="INTEGER" size="12" description=""/>
+   			<column name="income" required="true" type="FLOAT" description=""/>
+   			<column name="atmshow" required="true" type="INTEGER" size="12" description=""/>
+   			<column name="cast_id" required="true" type="INTEGER" description=""/>
+   			<column name="idea_id" required="true" type="INTEGER" description=""/>
+   			<column name="create_date" required="true" type="TIMESTAMP" description=""/>
+   			<foreign-key foreignTable="sdk_device" name="fk_sdk_log_device_id">
+						<reference local="sdk_device_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="ad_type" name="fk_sdk_log_adType_fkid">
+						<reference local="ad_type_id" foreign="id"/>
+				</foreign-key>
+				<foreign-key foreignTable="sdk_name" name="fk_sdk_log_sdkName_fkid">
+						<reference local="sdk_id" foreign="id"/>
+				</foreign-key>
+  </table>
+  
+	<table name="ad_mutex" idMethod="native" description="">
+		<column name="id" required="true" type="INTEGER" primaryKey="true" autoIncrement="true" description="id"/>
+		<column name="mutex_id" required="true" type="INTEGER" description=""/>
+		<column name="subject_type" required="true" type="INTEGER" description=""/>
+		<column name="subject_value" required="true" type="VARCHAR" description=""/>
+		<column name="object_type" required="true" type="INTEGER" description=""/>
+		<column name="object_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="ad_type" required="true" type="VARCHAR" size="32" description=""/>
+		<column name="sub_Ad_Type" required="true" type="VARCHAR" size="32" description=""/>
+		<column name="update_time" required="true" type="DATE" description=""/>
+		<column name="start_time" required="true" type="DATE" description=""/>
+		<column name="end_time" required="true" type="DATE" description=""/>
+		<column name="status" required="true" type="INTEGER" default="1" description=""/>			
+  	</table>
+
+  <table name="cast_config" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="cast_key" required="true"  type="VARCHAR" size="256" description=""/>
+		<column name="cast_value" required="false" type="LONGVARCHAR"  description=""/>
+  </table>
+
+	<table name="cast_scene" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_scene">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="cast_goods" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id"/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+		<column name="direct_name" required="false" type="VARCHAR" size="255" description=""/>
+		<column name="direct_value" required="true" type="VARCHAR" size="255" description=""/>
+		<column name="is_positive" required="true" type="INTEGER" default="1" description=""/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id_goods">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+
+
+	<table name="idea_thumbnail" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"  autoIncrement="true"  description=""/>
+		<column name="thumbnail_id" required="true" type="VARCHAR"  size="255"  description=""/>
+		<column name="idea_url_id" required="true" type="INTEGER" description=""/>
+		<column name="title" required="false" type="VARCHAR" size="512" description=""/>
+		<column name="thumbnail_url" required="false" type="VARCHAR" size="512" description=""/>
+		<column name="update_time" required="true" type="TIMESTAMP" description=""/>
+		<foreign-key foreignTable="idea_url" name="fk_idea_url_id">
+			<reference local="idea_url_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	<table name="blacklist" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"  autoIncrement="true"  description=""/>
+		<column name="type" required="true" type="VARCHAR"  size="20"  description=""/>
+        <column name="value" required="true" type="VARCHAR"  size="15"  description=""/>
+	</table>
+	
+	<table name="ad_position" idMethod="native" description="">
+		<column name="id" required="true" primaryKey="true" type="INTEGER"  autoIncrement="false"  description=""/>
+		<column name="name" required="true" type="VARCHAR"  size="2000"  description=""/>
+        <column name="media" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="device" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="type" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="pos_type" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="pos_sub_type" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="req_point" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="page_comment" required="true" type="VARCHAR"  size="2000"  description=""/>
+		<column name="place" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="page_size" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="template" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="seq_num" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="old_id" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="value" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="update_time" required="true" type="VARCHAR"  size="128"  description=""/>
+		<column name="status" required="true" type="VARCHAR"  size="11"  description=""/>
+	</table>
+
+    <table name="idea_direction" idMethod="native" description="素材定向表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description=""/>
+		<column name="cast_id" required="true" type="INTEGER" description=""/>
+        <column name="idea_id" required="true" type="INTEGER" description=""/>
+		<column name="direction_type" required="true" type="VARCHAR"  size="128"  description="定向类型groupCrowd: 集团资产人群,unGroupCrowd: 非集团资产人群,os：操作系统'"/>
+		<column name="direction_value" required="true" type="VARCHAR"  size="128"  description="'定向值 os枚举值：0表示ios, 1表示andriod,人群id: id列表"/>
+	</table>
+	<!-- SDK 配置 结束 -->
+	<!--
+	<table name="page" idMethod="none" description="含有广告位的广告页面">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="描述"/>
+		<column name="status" required="false" type="INTEGER" default="1" description="状态,1为活跃，0为停止"/>
+		<column name="site" required="false" default="1" type="INTEGER" description="优酷的还是土豆的；优酷：1  土豆：-1"/>
+	</table>
+	<table name="block" idMethod="none" description="广告块">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="描述"/>
+		<column name="htmlcode" required="false" type="LONGVARCHAR" size="2000" description="显示的html代码"/>
+		<column name="status" required="false" type="INTEGER" default="1" description="状态,1为活跃，0为停止"/>
+		<column name="page_id" required="false" type="INTEGER" description="所属页面id"/>
+		<column name="site" required="false" default="1" type="INTEGER" description="优酷的还是土豆的；优酷：1  土豆：-1"/>
+		<foreign-key foreignTable="page" name="fk_page_id">
+			<reference local="page_id" foreign="id"/>
+		</foreign-key>
+	</table> 
+	<table name="h_position" idMethod="none" description="广告位">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="name" required="true" type="VARCHAR" size="255" description="名称"/>
+		<column name="description" required="false" type="VARCHAR" size="255" description="描述"/>
+		<column name="width" required="true" type="INTEGER" description="宽"/>
+		<column name="height" required="true" type="INTEGER" description="高"/>
+		<column name="page_id" required="false" type="INTEGER" description="所属页面id"/>
+		<column name="block_id" required="false" type="INTEGER" description="所属块id"/>
+		<column name="status" required="false" type="INTEGER" default="1" description="状态,1为活跃，为0停止"/>
+		<column name="isEditable" required="false" type="INTEGER" default="-1" description="1为可以修改，-1为不可以修改"/>
+		<column name="price" required="false" type="VARCHAR" size="255" description="刊例编码，对应刊例表的code字段(作废)"/>
+		<column name="alias" required="false" type="VARCHAR" size="255" description="别名，用于在资源预订的时候显示"/>
+		<column name="isShow" required="false" type="VARCHAR" size="255" description="资源预订的时候是否显示，默认为0=显示，-1=不显示, 1=仅管理员显示, 2=仅投放显示"/>
+		<column name="show_index" required="false" type="INTEGER" description="设置资源预订时的显示顺序，1为最高优先级"/>
+		<column name="max_ad_num" required="false" type="INTEGER" default="1" description="当前广告位上每天可以预订的广告合同最大值，0为一个都不能订，-1为不限制"/>
+		<column name="p_type" required="false" type="INTEGER" default="1" description="广告位类型 1：标准广告位，2：通用派生广告位，3：合同派生广告位" /> 
+		<column name="parent_id" required="false" type="INTEGER" default="-1" description="父广告位id，如果当前广告位是标准广告位，此字段为-1" />
+		<column name="order_id" required="false" type="INTEGER" default="-1" description="合同id，如果当前广告位是标准广告位或通用派生广告位，此字段为-1" />
+		<column name="unit" required="false" type="INTEGER" default="-1" description="价格计算方式，1=按CPM，2=按天，标准广告位和派生广告位为-1，请从postion_quotation表查询" /> 
+		<column name="p_price" required="false" type="INTEGER" default="0" description="派生广告位的单价，元为计价单位" /> 
+		<column name="res_type" required="false" type="VARCHAR" size="255" default="-1" description="广告资源类型" /> 
+		<column name="cast_sign" required="false" type="INTEGER" default="0" description="投放标识：0为系统投放，1为非系统投放" /> 
+		<column name="price_type" required="true" type="INTEGER" default="-1" description="价格类型: 0为刊例价，1为净价"/>
+		<column name="site" required="false" default="1" type="INTEGER" description="优酷的还是土豆的；优酷：1  土豆：-1"/>
+		<foreign-key foreignTable="page" name="fk_page_id">
+			<reference local="page_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="block" name="fk_block_id">
+			<reference local="block_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="h_position" name="fk_parent_id" onUpdate="none" onDelete="none">
+			 <reference local="parent_id" foreign="id" /> 
+		 </foreign-key>
+
+	</table>
+	<table name="position_map" idMethod="none" description="页面广告位置生成表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="false" description="id,非自增"/>
+		<column name="ad_type_id" required="true" type="INTEGER" description="广告类型"/>
+		<column name="channel_id" required="true" type="VARCHAR" size="50" description="地区"/>
+		<column name="v_position_id" required="true" type="INTEGER" description="贴片广告位置"/>
+		<column name="cast_page_value" required="true" type="INTEGER" description="cast_page中的value值"/>
+		<column name="h_position_id" required="true" type="INTEGER" description="页面广告类型"/>
+	</table>
+	-->
+	
+	<!--TODO 确定鸟，每天的轮数是可能不同的，该表跟cast_cpm重复，要舍弃掉-->
+	<!--<table name="cast_lunbo" idMethod="native" description="投放轮播表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="lun" required="true" type="INTEGER" description="投放在第几轮"/>
+		<column name="total_lun" required="true" type="INTEGER" description="总轮次"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>-->
+	
+	<!--TODO 确定鸟，每天的priority都相同,转移到ad_cast投放表-->
+	<!--<table name="ration_optimize" idMethod="native" description="定量优化表">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="priority" required="true" type="INTEGER" description="投放优先级"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>-->
+	<!--TODO 确定鸟，每天的percent可能都不相同，percent的值转到cast_cpm中-->	
+	<!--<table name="cast_percent" idMethod="native" description="投放百分比">
+		<column name="id" required="true" primaryKey="true" type="INTEGER" autoIncrement="true" description="id,自增"/>
+		<column name="cast_id" required="true" type="INTEGER" description="投放id"/>
+		<column name="percent" required="true" type="FLOAT" description="占剧场相关投放位置容量的比例"/>
+		<foreign-key foreignTable="ad_cast" name="fk_cast_id">
+			<reference local="cast_id" foreign="id"/>
+		</foreign-key>
+	</table>
+	-->
+
+</database>

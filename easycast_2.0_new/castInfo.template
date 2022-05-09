@@ -1,0 +1,6 @@
+<td class="col_stat_name"><div class="stat_name">$workflowName</a></div></td>
+<td class="col_stat"><a href=$CaseName/$CaseName.html>$shelfcodeName</td>
+<td class="col_stat_time"><a href=$CaseName/$CaseName.html>$time</td>
+<td class="col_stat_ip"><a href=$CaseName/$CaseName.html>$remote_ip</td>
+<td class="col_stat_date"><a href=$CaseName/$CaseName.html>$date</td>
+<td class="col_stat_discription">$Description</td></tr>
